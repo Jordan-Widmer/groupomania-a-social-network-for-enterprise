@@ -8,16 +8,14 @@
     <label for="click" class="menu-btn">
       <i class="fa-solid fa-bars"></i>
     </label>
-    <ul style="display: flex; justify-content: center; align-items: center">
+    <ul class="navbar-list">
       <li>
         <router-link class="active" to="/acceuil">Home</router-link>
       </li>
       <li>
         <router-link to="/profil" class="nav-link">Profil</router-link>
       </li>
-      <li>
-        <!-- <router-link>Déconnexion</router-link> -->
-      </li>
+
       <li>
         <div class="half">
           <label for="profile2" class="profile-dropdown">
@@ -38,7 +36,7 @@
                 </router-link>
               </li>
               <li>
-                <router-link to="#">
+                <router-link to="#" @click="handleLogout">
                   <i class="mdi mdi-logout"></i>Logout
                 </router-link>
               </li>
@@ -52,7 +50,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "Header",
@@ -61,6 +59,12 @@ export default {
   },
   computed: {
     ...mapGetters(["getLoggedUser"]),
+  },
+  methods: {
+    ...mapActions(["LogOut"]),
+    handleLogout() {
+      this.LogOut();
+    },
   },
 };
 </script>
@@ -77,6 +81,20 @@ body {
 }
 p {
   color: red;
+}
+@media (max-width: 550px) {
+  .navbar-list {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    flex: 40% !important;
+  }
+  .nav ul li {
+    margin: 20px 0px !important;
+  }
+  .profile-dropdown input[type="checkbox"]:checked ~ ul {
+    margin-left: 15px !important;
+  }
 }
 nav {
   display: flex;
@@ -156,7 +174,7 @@ input[type="checkbox"] {
   }
   nav ul li {
     width: 100%;
-    margin: 40px 0;
+    /* margin: 40px 0; */
   }
   nav ul li a {
     width: 100%;
@@ -201,6 +219,7 @@ input[type="checkbox"] {
 .profile-dropdown input[type="checkbox"]:checked ~ ul {
   display: block;
   animation: pulse 0.5s;
+  z-index: 20000;
 }
 .profile-dropdown input[type="checkbox"]:checked ~ label i {
   color: #f2f2f2;
@@ -330,6 +349,13 @@ p.subtitle {
   opacity: 0.25;
   z-index: -1;
   background: url(https://ar1web-com.googlecode.com/svn/Bg/bg63.gif);
+}
+.navbar-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #1b1b1b;
+  z-index: 20000;
 }
 </style>
 

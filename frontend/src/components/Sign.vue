@@ -2,23 +2,22 @@
 <body>
   <div class="wrapper">
     <h2>Registration Groupomania</h2>
-    <form @submit.prevent="handleSignUp">
+    <form class="text-center" @submit.prevent="handleSignUp">
       <div class="input-box">
-        <input type="text" v-model="user.name" placeholder="Enter your name" required />
+        <input type="text" v-model="user.name" placeholder="Enter your name" />
+        <p class="error" v-if="error.name">{{error.name}}</p>
       </div>
       <div class="input-box">
-        <input type="email" placeholder="Enter your email" v-model="user.email" required />
+        <input type="email" placeholder="Enter your email" v-model="user.email" />
+        <p class="error" v-if="error.email">{{error.email}}</p>
       </div>
       <div class="input-box">
-        <input type="password" placeholder="Create password" required v-model="user.password" />
+        <input type="password" placeholder="Create password" v-model="user.password" />
+        <p class="error" v-if="error.password">{{error.password}}</p>
       </div>
       <div class="input-box">
-        <input
-          type="password"
-          placeholder="Confirm password"
-          required
-          v-model="user.conformPassword"
-        />
+        <input type="password" placeholder="Confirm password" v-model="user.conformPassword" />
+        <p class="error" v-if="error.conformPassword">{{error.conformPassword}}</p>
       </div>
       <div class="policy">
         <input type="checkbox" />
@@ -51,16 +50,52 @@ export default {
         password: "",
         conformPassword: "",
       },
+      error: {
+        name: "",
+        email: "",
+        password: "",
+        conformPassword: "",
+      },
     };
   },
   methods: {
     ...mapActions(["signUp"]),
+    validateForm() {
+      if (this.user.name == "") {
+        this.error.name = "Please enter your name";
+        return false;
+      }
+      if (this.user.email == "") {
+        this.error.email = "Please enter your email";
+        return false;
+      }
+      if (this.user.password == "") {
+        this.error.password = "Please enter your Password";
+        return false;
+      }
+      if (this.user.password.length < 5) {
+        this.error.password = "password should be more than 5 characters";
+        return false;
+      }
+      if (this.user.conformPassword == "") {
+        this.error.conformPassword = "Please conform your password";
+        return false;
+      }
+      if (this.user.password != this.user.conformPassword) {
+        this.error.conformPassword = "Your password does not match";
+        return false;
+      }
+      return true;
+    },
     handleSignUp() {
-      this.signUp({
-        name: this.user.name,
-        email: this.user.email,
-        password: this.user.password,
-      });
+      console.log(this.validateForm());
+      if (this.validateForm()) {
+        this.signUp({
+          name: this.user.name,
+          email: this.user.email,
+          password: this.user.password,
+        });
+      }
     },
   },
 };
@@ -111,7 +146,7 @@ body {
 }
 .wrapper form .input-box {
   height: 52px;
-  margin: 18px 0;
+  margin: 26px 0;
 }
 ::placeholder {
   color: lightgrey;
@@ -197,6 +232,11 @@ nav .logo {
 }
 nav .logo img {
   height: 230px;
+}
+.error {
+  text-align: left !important;
+  padding: 6px 2px;
+  color: red;
 }
 </style>
 

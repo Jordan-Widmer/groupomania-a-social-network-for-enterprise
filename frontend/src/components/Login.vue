@@ -3,11 +3,14 @@
   <div class="wrapper">
     <h2 class="title">Login Groupomania</h2>
     <form @submit.prevent="handleLogIn">
+      <div class="alert" v-if="LoginError">{{this.LoginErrorMessage}}</div>
       <div class="field">
-        <input type="email" required placeholder="Email Address" v-model="user.email" />
+        <input type="email" placeholder="Email Address" v-model="user.email" />
+        <p class="error" v-if="error.email">{{error.email}}</p>
       </div>
       <div class="field">
-        <input type="password" required placeholder="Password" v-model="user.password" />
+        <input type="password" placeholder="Password" v-model="user.password" />
+        <p class="error" v-if="error.password">{{error.password}}</p>
       </div>
       <div class="content">
         <div class="checkbox">
@@ -31,19 +34,43 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "Login",
+  computed: {
+    ...mapState(["LoginError", "LoginErrorMessage"]),
+  },
   methods: {
     ...mapActions(["Login"]),
     handleLogIn() {
-      this.Login({ ...this.user });
+      if (this.validateForm()) {
+        this.Login({ ...this.user });
+      }
+    },
+    validateForm() {
+      if (this.user.email == "") {
+        this.error.email = "Please enter your email";
+        return false;
+      }
+      if (this.user.password == "") {
+        this.error.password = "Please enter your Password";
+        return false;
+      }
+      if (this.user.password.length < 5) {
+        this.error.password = "password should be more than 5 characters";
+        return false;
+      }
+      return true;
     },
   },
   data() {
     return {
       user: {
+        email: "",
+        password: "",
+      },
+      error: {
         email: "",
         password: "",
       },
@@ -98,7 +125,7 @@ body {
 .wrapper form .field {
   height: 50px;
   width: 100%;
-  margin-top: 20px;
+  margin-top: 40px;
   position: relative;
 }
 .wrapper form .field input {
@@ -123,6 +150,7 @@ form .content {
   font-size: 16px;
   align-items: center;
   justify-content: space-around;
+  margin-top: 30px;
 }
 form .content .checkbox {
   display: flex;
@@ -196,6 +224,21 @@ form .signup-link a:hover {
     border-radius: unset;
     font-size: 31px;
   }
+}
+.error {
+  text-align: left !important;
+  padding: 6px 2px;
+  color: red;
+}
+.alert {
+  position: relative;
+  padding: 1rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  color: #842029;
+  background-color: #f8d7da;
+  border-color: #f5c2c7;
 }
 </style>
 

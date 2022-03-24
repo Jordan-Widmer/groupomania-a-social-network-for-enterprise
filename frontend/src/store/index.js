@@ -8,7 +8,11 @@ export default createStore({
     feeds: [],
     user: {},
     LoginError: false,
-    LoginErrorMessage: ""
+    LoginErrorMessage: "",
+    profileUpdate: false,
+    profileUpdateMessage: "",
+    profileDelete: false,
+    profileDeleteMessage: ""
   },
   getters: {
     getLoggedIn: (state) => state.loggedIn,
@@ -21,6 +25,19 @@ export default createStore({
     },
     LOGGINGERRORMESSAGE(state, payload) {
       state.LoginErrorMessage = payload
+    },
+    PROFILEUPLOADERROR(state, payload) {
+      state.profileUpdate = payload
+    },
+    PROFILEUPLOADMESSAGE(state, payload) {
+      state.profileUpdateMessage = payload
+    },
+
+    PROFILEDELETEERROR(state, payload) {
+      state.profileDelete = payload
+    },
+    PROFILEDELETEMESSAGE(state, payload) {
+      state.profileDeleteMessage = payload
     },
     SAVEUSER(state, payload) {
       state.user = payload
@@ -66,7 +83,9 @@ export default createStore({
     UpdateProfile({ commit }, payload) {
 
       const formData = new FormData();
-      formData.append('file', payload.file);
+      if (payload.file) {
+        formData.append('file', payload.file);
+      }
       formData.append("email", payload.email);
       formData.append("password", payload.password);
       formData.append("name", payload.name);
@@ -76,10 +95,18 @@ export default createStore({
         }
       })
         .then(response => {
-          console.log(response)
-          commit('SAVEUSER', response.data)
-        }).catch((error) => {
+          console.log(response.data)
+          commit('SAVEUSER', response.data);
+          commit('PROFILEUPLOADERROR', true);
+          commit('PROFILEUPLOADMESSAGE', "Profile Updated");
 
+          setTimeout(() => {
+            commit('PROFILEUPLOADERROR', false);
+            commit('PROFILEUPLOADMESSAGE', "");
+          }, 2000);
+
+        }).catch((error) => {
+          console.log(error)
         });
     },
 
@@ -93,6 +120,8 @@ export default createStore({
           console.log(response)
           commit('SAVEUSER', {})
           commit('LOGGEDIN', false);
+          commit(' PROFILEDELETEERROR', true);
+          // commit('LOGGINGERRORMESSAGE', error.response.data.msg);
           router.push('/sign').catch((e) => { console.log(e) })
 
         }).catch((error) => {
@@ -110,9 +139,19 @@ export default createStore({
           console.log(response)
           commit('SAVEUSER', response.data)
           commit('LOGGEDIN', true);
+
+
+
           router.push('/acceuil').catch((e) => { console.log(e) })
         }).catch((error) => {
+          commit('LOGGINGERROR', true);
+          commit('LOGGINGERRORMESSAGE', error.response.data.msg);
 
+
+          setTimeout(() => {
+            commit('LOGGINGERROR', false);
+            commit('LOGGINGERRORMESSAGE', "");
+          }, 5000)
         });
     },
 

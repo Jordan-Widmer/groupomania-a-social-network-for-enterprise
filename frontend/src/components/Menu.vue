@@ -2,6 +2,7 @@
 <body>
   <div class="wrapper">
     <form action="#" @submit.prevent="handleUpdateProfile">
+      <div class="alert" v-if="profileUpdate">{{profileUpdateMessage}}</div>
       <img :src="url" v-if="url" width="100" height="100" class="image-profile" alt />
       <br />
       <div class="upload-btn-wrapper">
@@ -30,7 +31,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
   name: "Menu",
@@ -64,6 +65,7 @@ export default {
     },
   },
   computed: {
+    ...mapState(["profileUpdate", "profileUpdateMessage"]),
     ...mapGetters(["getLoggedUser"]),
   },
   mounted() {
@@ -231,6 +233,16 @@ nav .logo img {
   left: 0;
   top: 0;
   opacity: 0;
+}
+.alert {
+  position: relative;
+  padding: 1rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  color: #842029;
+  background-color: #f8d7da;
+  border-color: #f5c2c7;
 }
 </style>
 
