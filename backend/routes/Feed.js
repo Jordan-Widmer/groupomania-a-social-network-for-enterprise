@@ -57,7 +57,7 @@ router.post('/', upload.single('file'), async (req, res) => {
         feed = new Feed({
             Text: text,
             addedBy: addedBy,
-            image: req.file.filename
+            image: req.file ? req.file.filename : ""
         })
         await feed.save();
         res.status(200).send(feed);
@@ -67,72 +67,6 @@ router.post('/', upload.single('file'), async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
-
-/**
- * @route Put / api/courses/:id
- * @description update course
- * @access Private
- */
-// router.put('/:id', async (req, res) => {
-
-//     const { title, subTitle, description, publication_Status } = req.body;
-
-//     // Build contact object
-//     const updatedCourse = {};
-//     if (title) updatedCourse.title = title;
-//     if (subTitle) updatedCourse.subTitle = subTitle;
-//     if (description) updatedCourse.description = description;
-//     if (publication_Status) updatedCourse.publication_Status = publication_Status;
-
-//     console.log(req.param.id)
-//     try {
-
-//         let course = await Course.findById(req.params.id);
-//         if (!course) return res.status(404).json({ msg: 'Course not found' });
-
-//         // Make sure user owns contact
-//         if (course.educator_id.toString() !== req.user.id)
-//             return res.status(401).json({ msg: 'Not authorized' });
-
-//         course = await Course.findByIdAndUpdate(
-//             req.params.id,
-//             { $set: updatedCourse },
-//             { new: true }
-//         );
-
-//         res.json(course);
-//     } catch (err) {
-//         console.error(err.message);
-//         res.status(500).send('Server error');
-//     }
-
-// });
-
-// /**
-//  * @route DELETE / api/course
-//  * @description remove course
-//  * @access Private
-//  */
-// router.delete('/:id', async (req, res) => {
-//     try {
-//         const course = await Course.findById(req.params.id);
-//         if (!course) return res.status(404).json({ msg: 'Course with this id does not exists' });
-//         // Make sure user owns course
-//         if (course.educator_id.toString() !== req.user.id)
-//             return res.status(401).json({ msg: 'Not authorized' });
-
-//         // RegisterCourse.deleteMany({ course_id: req.params.id }).then((d) => {
-//         //     console.log(d.deletedCount);
-//         // });
-//         await Course.findByIdAndRemove(req.params.id);
-//         res.status(200).json({ msg: 'Course removed' });
-
-//     } catch (err) {
-//         console.error(err.message);
-//         res.status(500).send('Server error');
-//     }
-
-// });
 
 
 

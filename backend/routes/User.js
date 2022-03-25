@@ -61,7 +61,7 @@ router.put('/:id', upload.single('file'), async (req, res) => {
     if (name) updateUser.name = name;
     if (email) updateUser.email = email;
     if (password) updateUser.password = password;
-    if (req.file.filename) updateUser.imageAvatar = req.file.filename
+    if (req.file) updateUser.imageAvatar = req.file.filename
     try {
 
         var user = await User.findByIdAndUpdate(
