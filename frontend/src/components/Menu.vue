@@ -1,33 +1,60 @@
 <template>
-<body>
-  <div class="wrapper">
-    <form action="#" @submit.prevent="handleUpdateProfile">
-      <div class="alert" v-if="profileUpdate">{{profileUpdateMessage}}</div>
-      <img :src="url" v-if="url" width="100" height="100" class="image-profile" alt />
-      <br />
-      <div class="upload-btn-wrapper">
-        <button class="btn">Upload a file</button>
-        <input type="file" accept="image/*" @change="selectFile($event)" />
-      </div>
-      <h2>Mon profil</h2>
-      <div class="input-box">
-        <input type="text" placeholder="Change name" ref="userName" v-model="user.name" required />
-      </div>
-      <div class="input-box">
-        <input type="email" placeholder="Change email" v-model="user.email" required />
-      </div>
-      <div class="input-box">
-        <input type="password" placeholder="Change password" v-model="user.password" required />
-      </div>
-      <div class="input-box button">
-        <input type="Submit" value="Mettre à jour" />
-      </div>
-      <div class="input-box button">
-        <input type="button" @click="handleDeleteProfile" value="Supprimer profil" />
-      </div>
-    </form>
-  </div>
-</body>
+  <body>
+    <div class="wrapper">
+      <form action="#" @submit.prevent="handleUpdateProfile">
+        <div class="alert" v-if="profileUpdate">{{ profileUpdateMessage }}</div>
+        <img
+          :src="url"
+          v-if="url"
+          width="100"
+          height="100"
+          class="image-profile"
+          alt
+        />
+        <br />
+        <div class="upload-btn-wrapper">
+          <button class="btn">Upload a file</button>
+          <input type="file" accept="image/*" @change="selectFile($event)" />
+        </div>
+        <h2>Mon profil</h2>
+        <div class="input-box">
+          <input
+            type="text"
+            placeholder="Change name"
+            ref="userName"
+            v-model="user.name"
+            required
+          />
+        </div>
+        <div class="input-box">
+          <input
+            type="email"
+            placeholder="Change email"
+            v-model="user.email"
+            required
+          />
+        </div>
+        <div class="input-box">
+          <input
+            type="password"
+            placeholder="Change password"
+            v-model="user.password"
+            required
+          />
+        </div>
+        <div class="input-box button">
+          <input type="Submit" value="Mettre à jour" />
+        </div>
+        <div class="input-box button">
+          <input
+            type="button"
+            @click="handleDeleteProfile"
+            value="Supprimer profil"
+          />
+        </div>
+      </form>
+    </div>
+  </body>
 </template>
 
 <script>
@@ -245,4 +272,3 @@ nav .logo img {
   border-color: #f5c2c7;
 }
 </style>
-

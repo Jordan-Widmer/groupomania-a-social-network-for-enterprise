@@ -9,7 +9,12 @@
             <button class="btn">
               <i class="fa-solid fa-image"></i>
             </button>
-            <input type="file" name="myfile" accept="image/*" @change="selectFile($event)" />
+            <input
+              type="file"
+              name="myfile"
+              accept="image/*"
+              @change="selectFile($event)"
+            />
           </div>
           <input type="submit" class="send-button" value="Send" />
         </div>
@@ -19,7 +24,7 @@
       </div>
     </form>
     <div class="feeds">
-      <div class="feed-container" v-for="(item , index) in feeds" :key="index">
+      <div class="feed-container" v-for="(item, index) in feeds" :key="index">
         <div class="single-feed">
           <div class="feed-meta">
             <img
@@ -28,22 +33,26 @@
               height="50"
             />
             <div class="feed-meta-user-info">
-              <h5>{{item.addedBy[0].name}}</h5>
-              <p>{{formateDate(item.addedAt)}}</p>
+              <h5>{{ item.addedBy[0].name }}</h5>
+              <p>{{ formateDate(item.addedAt) }}</p>
             </div>
           </div>
           <div class="feed-body">
-            <p>{{item.Text}}</p>
-            <img :src="`http://localhost:5000/api/uploads/${item.image}`" alt="hello" width="500" />
+            <p>{{ item.Text }}</p>
+            <img
+              :src="`http://localhost:5000/api/uploads/${item.image}`"
+              alt="hello"
+              width="500"
+            />
             <div class="feed-status">
               <div class="feed-likes">
                 <i class="fa-solid fa-thumbs-up"></i>
-                {{item.like}}
+                {{ item.like }}
               </div>
 
               <div class="feed-comments">
                 <i class="fa-regular fa-message"></i>
-                {{item.comments.length}}
+                {{ item.comments.length }}
               </div>
             </div>
             <div class="border">
@@ -56,13 +65,22 @@
                 </button>
               </div>
             </div>
-            <div class="comments-container" v-if="showCommentForm == true && item._id == commentOf">
-              <div class="comments" v-for="(comment , index) in item.comments" :key="index">
+            <div
+              class="comments-container"
+              v-if="showCommentForm == true && item._id == commentOf"
+            >
+              <div
+                class="comments"
+                v-for="(comment, index) in item.comments"
+                :key="index"
+              >
                 <div class="comment">
-                  <img :src="`http://localhost:5000/api/uploads/${comment.commentBy.imageAvatar}`" />
+                  <img
+                    :src="`http://localhost:5000/api/uploads/${comment.commentBy.imageAvatar}`"
+                  />
                   <div class="comment-user-info">
-                    <h5>{{comment.commentBy.name}}</h5>
-                    <p>{{comment.Comment}}</p>
+                    <h5>{{ comment.commentBy.name }}</h5>
+                    <p>{{ comment.Comment }}</p>
                   </div>
                 </div>
               </div>

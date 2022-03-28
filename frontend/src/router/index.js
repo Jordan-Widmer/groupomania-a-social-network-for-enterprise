@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import store from '@/store';
+import store from "@/store";
 
 const routes = [
   {
@@ -8,8 +8,8 @@ const routes = [
     name: "home",
     component: HomeView,
     meta: {
-      requiredAuth: true
-    }
+      requiredAuth: true,
+    },
   },
   {
     path: "/sign",
@@ -29,8 +29,8 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Accueil.vue"),
     meta: {
-      requiredAuth: true
-    }
+      requiredAuth: true,
+    },
   },
   {
     path: "/profil",
@@ -38,12 +38,10 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Profil.vue"),
     meta: {
-      requiredAuth: true
-    }
+      requiredAuth: true,
+    },
   },
-
 ];
-
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
@@ -52,11 +50,10 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const LoggedIn = store.getters.getLoggedIn;
-  console.log(LoggedIn)
-  const requiredAuth = to.matched.every(user => user.meta.requiredAuth)
-  if (requiredAuth && !LoggedIn) next({ name: 'Connexion' })
+  console.log(LoggedIn);
+  const requiredAuth = to.matched.every((user) => user.meta.requiredAuth);
+  if (requiredAuth && !LoggedIn) next({ name: "Connexion" });
   else next();
-})
-
+});
 
 export default router;

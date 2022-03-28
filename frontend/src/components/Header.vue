@@ -1,52 +1,52 @@
 <template>
-<body>
-  <nav>
-    <div class="logo">
-      <img src="../assets/icon-left-font-monochrome-white.png" alt />
-    </div>
-    <input type="checkbox" id="click" />
-    <label for="click" class="menu-btn">
-      <i class="fa-solid fa-bars"></i>
-    </label>
-    <ul class="navbar-list">
-      <li>
-        <router-link class="active" to="/acceuil">Home</router-link>
-      </li>
-      <li>
-        <router-link to="/profil" class="nav-link">Profil</router-link>
-      </li>
+  <body>
+    <nav>
+      <div class="logo">
+        <img src="../assets/icon-left-font-monochrome-white.png" alt />
+      </div>
+      <input type="checkbox" id="click" />
+      <label for="click" class="menu-btn">
+        <i class="fa-solid fa-bars"></i>
+      </label>
+      <ul class="navbar-list">
+        <li>
+          <router-link class="active" to="/acceuil">Home</router-link>
+        </li>
+        <li>
+          <router-link to="/profil" class="nav-link">Profil</router-link>
+        </li>
 
-      <li>
-        <div class="half">
-          <label for="profile2" class="profile-dropdown">
-            <input type="checkbox" id="profile2" />
-            <span>{{getLoggedUser.name }}</span>
-            <img
-              :src="`http://localhost:5000/api/uploads/${getLoggedUser.imageAvatar}`"
-              width="40"
-              height="40"
-            />
-            <label for="profile2">
-              <i class="mdi mdi-menu"></i>
+        <li>
+          <div class="half">
+            <label for="profile2" class="profile-dropdown">
+              <input type="checkbox" id="profile2" />
+              <span>{{ getLoggedUser.name }}</span>
+              <img
+                :src="`http://localhost:5000/api/uploads/${getLoggedUser.imageAvatar}`"
+                width="40"
+                height="40"
+              />
+              <label for="profile2">
+                <i class="mdi mdi-menu"></i>
+              </label>
+              <ul>
+                <li>
+                  <router-link to="/profil">
+                    <i class="mdi mdi-settings"></i>Settings
+                  </router-link>
+                </li>
+                <li>
+                  <router-link to="#" @click="handleLogout">
+                    <i class="mdi mdi-logout"></i>Logout
+                  </router-link>
+                </li>
+              </ul>
             </label>
-            <ul>
-              <li>
-                <router-link to="/profil">
-                  <i class="mdi mdi-settings"></i>Settings
-                </router-link>
-              </li>
-              <li>
-                <router-link to="#" @click="handleLogout">
-                  <i class="mdi mdi-logout"></i>Logout
-                </router-link>
-              </li>
-            </ul>
-          </label>
-        </div>
-      </li>
-    </ul>
-  </nav>
-</body>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </body>
 </template>
 
 <script>
@@ -358,4 +358,3 @@ p.subtitle {
   z-index: 20000;
 }
 </style>
-

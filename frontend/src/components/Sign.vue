@@ -1,40 +1,58 @@
 <template>
-<body>
-  <div class="wrapper">
-    <h2>Registration Groupomania</h2>
-    <form class="text-center" @submit.prevent="handleSignUp">
-      <div class="input-box">
-        <input type="text" v-model="user.name" placeholder="Enter your name" />
-        <p class="error" v-if="error.name">{{error.name}}</p>
-      </div>
-      <div class="input-box">
-        <input type="email" placeholder="Enter your email" v-model="user.email" />
-        <p class="error" v-if="error.email">{{error.email}}</p>
-      </div>
-      <div class="input-box">
-        <input type="password" placeholder="Create password" v-model="user.password" />
-        <p class="error" v-if="error.password">{{error.password}}</p>
-      </div>
-      <div class="input-box">
-        <input type="password" placeholder="Confirm password" v-model="user.conformPassword" />
-        <p class="error" v-if="error.conformPassword">{{error.conformPassword}}</p>
-      </div>
-      <div class="policy">
-        <input type="checkbox" />
-        <h3>I accept all terms & condition</h3>
-      </div>
-      <div class="input-box button">
-        <input type="Submit" value="Register Now" />
-      </div>
-      <div class="text">
-        <h3>
-          Already have an account?
-          <a href="/login">Login now</a>
-        </h3>
-      </div>
-    </form>
-  </div>
-</body>
+  <body>
+    <div class="wrapper">
+      <h2>Registration Groupomania</h2>
+      <form class="text-center" @submit.prevent="handleSignUp">
+        <div class="input-box">
+          <input
+            type="text"
+            v-model="user.name"
+            placeholder="Enter your name"
+          />
+          <p class="error" v-if="error.name">{{ error.name }}</p>
+        </div>
+        <div class="input-box">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            v-model="user.email"
+          />
+          <p class="error" v-if="error.email">{{ error.email }}</p>
+        </div>
+        <div class="input-box">
+          <input
+            type="password"
+            placeholder="Create password"
+            v-model="user.password"
+          />
+          <p class="error" v-if="error.password">{{ error.password }}</p>
+        </div>
+        <div class="input-box">
+          <input
+            type="password"
+            placeholder="Confirm password"
+            v-model="user.conformPassword"
+          />
+          <p class="error" v-if="error.conformPassword">
+            {{ error.conformPassword }}
+          </p>
+        </div>
+        <div class="policy">
+          <input type="checkbox" />
+          <h3>I accept all terms & condition</h3>
+        </div>
+        <div class="input-box button">
+          <input type="Submit" value="Register Now" />
+        </div>
+        <div class="text">
+          <h3>
+            Already have an account?
+            <a href="/login">Login now</a>
+          </h3>
+        </div>
+      </form>
+    </div>
+  </body>
 </template>
 
 <script>
@@ -239,4 +257,3 @@ nav .logo img {
   color: red;
 }
 </style>
-
