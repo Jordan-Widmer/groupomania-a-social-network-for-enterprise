@@ -1,13 +1,14 @@
 <template>
-    <Sign/>
+  <Sign />
 </template>
 
 <script>
-import Sign from "../components/Sign.vue"
+import Sign from "../components/Sign.vue";
 
 export default {
-    name: "Inscription",
-    components: {
-        Sign
-    }}
+  name: "Inscription",
+  components: {
+    Sign,
+  },
+};
 </script>

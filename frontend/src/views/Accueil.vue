@@ -10,7 +10,12 @@
               <button class="btn">
                 <i class="fa-solid fa-paperclip"></i>
               </button>
-              <input type="file" name="myfile" accept="image/*" @change="selectFile($event)" />
+              <input
+                type="file"
+                name="myfile"
+                accept="image/*"
+                @change="selectFile($event)"
+              />
             </div>
             <input type="submit" class="send-button" value="Send" />
           </div>
@@ -20,7 +25,7 @@
         </div>
       </form>
       <div class="feeds">
-        <div class="feed-container" v-for="(item , index) in feeds" :key="index">
+        <div class="feed-container" v-for="(item, index) in feeds" :key="index">
           <div class="single-feed">
             <div class="feed-meta">
               <img
@@ -31,12 +36,12 @@
                 height="50"
               />
               <div class="feed-meta-user-info">
-                <h5 v-if="item.addedBy[0]">{{item.addedBy[0].name}}</h5>
-                <p>{{formateDate(item.addedAt)}}</p>
+                <h5 v-if="item.addedBy[0]">{{ item.addedBy[0].name }}</h5>
+                <p>{{ formateDate(item.addedAt) }}</p>
               </div>
             </div>
             <div class="feed-body">
-              <p>{{item.Text}}</p>
+              <p>{{ item.Text }}</p>
               <img
                 class="feed-images"
                 v-if="item.image"
@@ -47,12 +52,12 @@
               <div class="feed-status">
                 <div class="feed-likes">
                   <i class="fa-solid fa-thumbs-up"></i>
-                  {{item.likedBy.length}}
+                  {{ item.likedBy.length }}
                 </div>
 
                 <div class="feed-comments">
                   <i class="fa-regular fa-message"></i>
-                  {{item.comments.length}}
+                  {{ item.comments.length }}
                 </div>
               </div>
               <div class="border">
@@ -60,7 +65,7 @@
                   <button
                     type="button"
                     v-if="isLiked(item, getLoggedUser._id) === false"
-                    @click="!handleLikePost(item._id , getLoggedUser._id )"
+                    @click="!handleLikePost(item._id, getLoggedUser._id)"
                   >
                     <i class="fa-regular fa-thumbs-up"></i> Like
                   </button>
@@ -73,18 +78,28 @@
                   </button>
                 </div>
               </div>
-              <div class="comments-container" v-if="showCommentForm == true && item._id == commentOf">
-                <div class="comments" v-for="(comment , index) in item.comments" :key="index">
+              <div
+                class="comments-container"
+                v-if="showCommentForm == true && item._id == commentOf"
+              >
+                <div
+                  class="comments"
+                  v-for="(comment, index) in item.comments"
+                  :key="index"
+                >
                   <div class="comment">
                     <div class="sectionComment">
-                      <img class="sectionComImg"
-                      v-if="comment.commentBy.imageAvatar"
-                      :src="`http://localhost:5000/api/uploads/${comment.commentBy.imageAvatar}`"
+                      <img
+                        class="sectionComImg"
+                        v-if="comment.commentBy.imageAvatar"
+                        :src="`http://localhost:5000/api/uploads/${comment.commentBy.imageAvatar}`"
                       />
-                      <h5 class="sectionComHfive">{{comment.commentBy.name}}</h5>
+                      <h5 class="sectionComHfive">
+                        {{ comment.commentBy.name }}
+                      </h5>
                     </div>
                     <div class="comment-user-info">
-                      <p>{{comment.Comment}}</p>
+                      <p>{{ comment.Comment }}</p>
                     </div>
                   </div>
                 </div>
@@ -242,7 +257,7 @@ body {
   outline: none;
   border: 0px;
   color: gray;
-  background: linear-gradient(-135deg, #ff9000, #c46f00);;
+  background: linear-gradient(-135deg, #ff9000, #c46f00);
   padding: 8px 20px;
   border-radius: 8px;
   font-size: 15px;
@@ -263,7 +278,7 @@ body {
   width: 55px;
   height: 33px;
   border-radius: 5px;
-  font-family: "Poppins", sans-serif;;
+  font-family: "Poppins", sans-serif;
   color: #fff;
 }
 
