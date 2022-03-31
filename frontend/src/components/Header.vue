@@ -1,52 +1,42 @@
 <template>
-  <body>
-    <nav>
-      <div class="logo">
-        <img src="../assets/icon-left-font-monochrome-white.png" alt />
-      </div>
-      <input type="checkbox" id="click" />
-      <label for="click" class="menu-btn">
-        <i class="fa-solid fa-bars"></i>
-      </label>
-      <ul class="navbar-list">
-        <li>
-          <router-link class="active" to="/acceuil">Home</router-link>
-        </li>
-        <li>
-          <router-link to="/profil" class="nav-link">Profil</router-link>
-        </li>
+<body>
+  <nav>
+    <div class="logo">
+      <img src="../assets/icon-left-font-monochrome-white.png" alt />
+    </div>
+    <input type="checkbox" id="click" />
+    <label for="click" class="menu-btn">
+      <i class="fa-solid fa-bars"></i>
+    </label>
+    <ul class="navbar-list">
+      <li>
+        <router-link class="active" to="/acceuil">Home</router-link>
+      </li>
+      <li>
+        <router-link to="/acceuil" class="nav-link">Actualités</router-link>
+      </li>
+      <li>
+        <router-link to="/profil" class="nav-link">Profil</router-link>
+      </li>
+      <li>
+        <router-link to="#" @click="handleLogout"><i class="mdi mdi-logout"></i>Déconnexion</router-link>
+      </li>
 
-        <li>
-          <div class="half">
-            <label for="profile2" class="profile-dropdown">
-              <input type="checkbox" id="profile2" />
-              <span>{{ getLoggedUser.name }}</span>
-              <img
-                :src="`http://localhost:5000/api/uploads/${getLoggedUser.imageAvatar}`"
-                width="40"
-                height="40"
-              />
-              <label for="profile2">
-                <i class="mdi mdi-menu"></i>
-              </label>
-              <ul>
-                <li>
-                  <router-link to="/profil">
-                    <i class="mdi mdi-settings"></i>Settings
-                  </router-link>
-                </li>
-                <li>
-                  <router-link to="#" @click="handleLogout">
-                    <i class="mdi mdi-logout"></i>Logout
-                  </router-link>
-                </li>
-              </ul>
-            </label>
-          </div>
-        </li>
-      </ul>
-    </nav>
-  </body>
+      <li>
+        <div class="half">
+          <label for="profile2" class="profile-dropdown">
+            <input type="checkbox" id="profile2" />
+            <img
+              :src="`http://localhost:5000/api/uploads/${getLoggedUser.imageAvatar}`"
+              width="40"
+              height="40"
+            />
+          </label>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</body>
 </template>
 
 <script>
@@ -126,6 +116,7 @@ nav ul li a {
   color: lightgrey;
   text-decoration: none;
   font-size: 18px;
+  font-family: 'Poppins', sans-serif;
   font-weight: 500;
   padding: 8px 15px;
   border-radius: 5px;
@@ -155,6 +146,10 @@ input[type="checkbox"] {
   nav .menu-btn i {
     display: block;
   }
+  .profile-dropdown img {
+    width: 6rem !important;
+    height: 6rem !important;
+  }
   #click:checked ~ .menu-btn i:before {
     content: "\f00d";
   }
@@ -171,10 +166,11 @@ input[type="checkbox"] {
   }
   #click:checked ~ ul {
     left: 0;
+    display: unset;
   }
   nav ul li {
     width: 100%;
-    /* margin: 40px 0; */
+    margin:10px 0;
   }
   nav ul li a {
     width: 100%;
@@ -185,7 +181,7 @@ input[type="checkbox"] {
   }
   #click:checked ~ ul li a {
     margin-left: 0px;
-  }
+  } 
   nav ul li a.active,
   nav ul li a:hover {
     background: none;
@@ -238,8 +234,10 @@ input[type="checkbox"] {
 }
 .profile-dropdown img {
   display: inline-block;
+  object-fit: cover;
   background: #d9d9d9;
-  height: 2.5rem;
+  height: 3.2rem;
+  width: 3.2rem;
   vertical-align: middle;
   margin-right: 1rem;
   margin: 0.5rem 0.75rem 0.5rem 0.5rem;
@@ -358,3 +356,4 @@ p.subtitle {
   z-index: 20000;
 }
 </style>
+

@@ -1,0 +1,4 @@
+{
+    "mongoURI": "mongodb+srv://Stinger145:AtlasP77Oilive44@cluster0.ye0pd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    "jwtSecret": "fyparc"
+}

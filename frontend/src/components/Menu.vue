@@ -1,60 +1,36 @@
 <template>
-  <body>
-    <div class="wrapper">
-      <form action="#" @submit.prevent="handleUpdateProfile">
-        <div class="alert" v-if="profileUpdate">{{ profileUpdateMessage }}</div>
-        <img
-          :src="url"
-          v-if="url"
-          width="100"
-          height="100"
-          class="image-profile"
-          alt
-        />
-        <br />
-        <div class="upload-btn-wrapper">
-          <button class="btn">Upload a file</button>
-          <input type="file" accept="image/*" @change="selectFile($event)" />
-        </div>
-        <h2>Mon profil</h2>
-        <div class="input-box">
-          <input
-            type="text"
-            placeholder="Change name"
-            ref="userName"
-            v-model="user.name"
-            required
-          />
-        </div>
-        <div class="input-box">
-          <input
-            type="email"
-            placeholder="Change email"
-            v-model="user.email"
-            required
-          />
-        </div>
-        <div class="input-box">
-          <input
-            type="password"
-            placeholder="Change password"
-            v-model="user.password"
-            required
-          />
-        </div>
-        <div class="input-box button">
-          <input type="Submit" value="Mettre à jour" />
-        </div>
-        <div class="input-box button">
-          <input
-            type="button"
-            @click="handleDeleteProfile"
-            value="Supprimer profil"
-          />
-        </div>
-      </form>
-    </div>
-  </body>
+<body>
+  <div class="wrapper">
+    <form action="#" @submit.prevent="handleUpdateProfile">
+      <div class="alert" v-if="profileUpdate">{{profileUpdateMessage}}</div>
+      <h2>Mon profil</h2>
+      <img :src="url" v-if="url" width="100" height="100" class="image-profile" alt />
+      <br />
+      <div class="upload-btn-wrapper">
+        <button class="btn">Upload a file</button>
+        <input type="file" accept="image/*" @change="selectFile($event)" />
+      </div>
+      <div class="input-box">
+        <input type="text" placeholder="Change name" ref="userName" v-model="user.name" />
+        <p class="error" v-if="error.name">{{error.name}}</p>
+      </div>
+      <div class="input-box">
+        <input type="email" placeholder="Change email" v-model="user.email" />
+        <p class="error" v-if="error.email">{{error.email}}</p>
+      </div>
+      <div class="input-box">
+        <input type="password" placeholder="Change password" v-model="user.password" />
+        <p class="error" v-if="error.password">{{error.password}}</p>
+      </div>
+      <div class="input-box button">
+        <input type="Submit" value="Mettre à jour" />
+      </div>
+      <div class="input-box button">
+        <input type="button" @click="handleDeleteProfile" value="Supprimer profil" />
+      </div>
+    </form>
+  </div>
+</body>
 </template>
 
 <script>
@@ -69,6 +45,11 @@ export default {
         email: "",
         password: "",
       },
+      error: {
+        name: "",
+        email: "",
+        password: "",
+      },
       file: [],
       url: null,
     };
@@ -76,11 +57,31 @@ export default {
   methods: {
     ...mapActions(["UpdateProfile", "DeleteProfile"]),
     handleUpdateProfile() {
-      this.UpdateProfile({
-        ...this.user,
-        id: this.getLoggedUser._id,
-        file: this.file,
-      });
+      if (this.validateForm()) {
+        this.UpdateProfile({
+          ...this.user,
+          id: this.getLoggedUser._id,
+          file: this.file,
+        });
+      }
+    },
+    validateForm() {
+      if (this.user.name == "") {
+        this.error.name = "Please enter your name";
+      }
+      if (this.user.email == "") {
+        this.error.email = "Please enter your email";
+        return false;
+      }
+      if (this.user.password == "") {
+        this.error.password = "Please enter your Password";
+        return false;
+      }
+      if (this.user.password.length < 5) {
+        this.error.password = "password should be more than 5 characters";
+        return false;
+      }
+      return true;
     },
     handleDeleteProfile() {
       this.DeleteProfile(this.getLoggedUser._id);
@@ -124,7 +125,6 @@ body {
   background: #1b1b1b;
   padding: 34px;
   border-radius: 6px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 .wrapper h2 {
   font-size: 35px;
@@ -132,11 +132,11 @@ body {
   color: #e2e2e2;
 }
 .wrapper form {
-  margin-top: 30px;
+  margin-top: 0px;
 }
 .wrapper form .input-box {
   height: 52px;
-  margin: 18px 0;
+  margin: 20px 0;
 }
 ::placeholder {
   color: lightgrey;
@@ -237,6 +237,10 @@ nav .logo img {
 }
 .image-profile {
   border-radius: 50%;
+  width: 8rem;
+  height: 8rem;
+  object-fit: cover;
+  margin: 10px 0px 10px 0px;
 }
 .upload-btn-wrapper {
   position: relative;
@@ -271,4 +275,10 @@ nav .logo img {
   background-color: #f8d7da;
   border-color: #f5c2c7;
 }
+.error {
+  text-align: left !important;
+  padding: 6px 2px;
+  color: red;
+}
 </style>
+

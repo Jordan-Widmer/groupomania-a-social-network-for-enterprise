@@ -1,107 +1,112 @@
 <template>
-  <Header />
-  <div class="container">
-    <form @submit.prevent="handleCreateFeed">
-      <div class="write">
-        <textarea name id cols="100" rows="5" v-model="text"></textarea>
-        <div class="controlls">
-          <div class="upload-btn-wrapper">
-            <button class="btn">
-              <i class="fa-solid fa-image"></i>
-            </button>
-            <input
-              type="file"
-              name="myfile"
-              accept="image/*"
-              @change="selectFile($event)"
-            />
-          </div>
-          <input type="submit" class="send-button" value="Send" />
-        </div>
-        <div v-if="url">
-          <img :src="url" alt width="100" height="100" />
-        </div>
-      </div>
-    </form>
-    <div class="feeds">
-      <div class="feed-container" v-for="(item, index) in feeds" :key="index">
-        <div class="single-feed">
-          <div class="feed-meta">
-            <img
-              :src="`http://localhost:5000/api/uploads/${item.addedBy[0].imageAvatar}`"
-              width="50"
-              height="50"
-            />
-            <div class="feed-meta-user-info">
-              <h5>{{ item.addedBy[0].name }}</h5>
-              <p>{{ formateDate(item.addedAt) }}</p>
+  <body>
+    <Header />
+    <div class="container">
+      <form @submit.prevent="handleCreateFeed">
+        <div class="write">
+          <textarea name id cols="100" rows="5" v-model="text"></textarea>
+          <div class="controlls">
+            <div class="upload-btn-wrapper">
+              <button class="btn">
+                <i class="fa-solid fa-paperclip"></i>
+              </button>
+              <input type="file" name="myfile" accept="image/*" @change="selectFile($event)" />
             </div>
+            <input type="submit" class="send-button" value="Send" />
           </div>
-          <div class="feed-body">
-            <p>{{ item.Text }}</p>
-            <img
-              :src="`http://localhost:5000/api/uploads/${item.image}`"
-              alt="hello"
-              width="500"
-            />
-            <div class="feed-status">
-              <div class="feed-likes">
-                <i class="fa-solid fa-thumbs-up"></i>
-                {{ item.like }}
+          <div class="image-preview" v-if="url">
+            <img :src="url" alt width="100" height="100" />
+          </div>
+        </div>
+      </form>
+      <div class="feeds">
+        <div class="feed-container" v-for="(item , index) in feeds" :key="index">
+          <div class="single-feed">
+            <div class="feed-meta">
+              <img
+                class="image-profile"
+                v-if="item.addedBy[0]"
+                :src="`http://localhost:5000/api/uploads/${item.addedBy[0].imageAvatar}`"
+                width="50"
+                height="50"
+              />
+              <div class="feed-meta-user-info">
+                <h5 v-if="item.addedBy[0]">{{item.addedBy[0].name}}</h5>
+                <p>{{formateDate(item.addedAt)}}</p>
               </div>
+            </div>
+            <div class="feed-body">
+              <p>{{item.Text}}</p>
+              <img
+                class="feed-images"
+                v-if="item.image"
+                :src="`http://localhost:5000/api/uploads/${item.image}`"
+                alt="hello"
+                width="500"
+              />
+              <div class="feed-status">
+                <div class="feed-likes">
+                  <i class="fa-solid fa-thumbs-up"></i>
+                  {{item.likedBy.length}}
+                </div>
 
-              <div class="feed-comments">
-                <i class="fa-regular fa-message"></i>
-                {{ item.comments.length }}
-              </div>
-            </div>
-            <div class="border">
-              <div class="feed-buttons">
-                <button type="button" @click="handleLikePost(item._id)">
-                  <i class="fa-regular fa-thumbs-up"></i> Like
-                </button>
-                <button @click="handleCommentClick(item._id)">
-                  <i class="fa-regular fa-message"></i> Comment
-                </button>
-              </div>
-            </div>
-            <div
-              class="comments-container"
-              v-if="showCommentForm == true && item._id == commentOf"
-            >
-              <div
-                class="comments"
-                v-for="(comment, index) in item.comments"
-                :key="index"
-              >
-                <div class="comment">
-                  <img
-                    :src="`http://localhost:5000/api/uploads/${comment.commentBy.imageAvatar}`"
-                  />
-                  <div class="comment-user-info">
-                    <h5>{{ comment.commentBy.name }}</h5>
-                    <p>{{ comment.Comment }}</p>
-                  </div>
+                <div class="feed-comments">
+                  <i class="fa-regular fa-message"></i>
+                  {{item.comments.length}}
                 </div>
               </div>
+              <div class="border">
+                <div class="feed-buttons">
+                  <button
+                    type="button"
+                    v-if="isLiked(item, getLoggedUser._id) === false"
+                    @click="!handleLikePost(item._id , getLoggedUser._id )"
+                  >
+                    <i class="fa-regular fa-thumbs-up"></i> Like
+                  </button>
+                  <button v-else type="button " class="feed-likes">
+                    <i class="fa-solid fa-thumbs-up"></i> Liked
+                  </button>
 
-              <div class="comment-filed">
-                <input type="text" v-model="comment" />
-                <button @click="handleAddComment(item._id)">
-                  <i class="fa-regular fa-paper-plane"></i>
-                </button>
+                  <button @click="handleCommentClick(item._id)">
+                    <i class="fa-regular fa-message"></i> Comment
+                  </button>
+                </div>
+              </div>
+              <div class="comments-container" v-if="showCommentForm == true && item._id == commentOf">
+                <div class="comments" v-for="(comment , index) in item.comments" :key="index">
+                  <div class="comment">
+                    <div class="sectionComment">
+                      <img class="sectionComImg"
+                      v-if="comment.commentBy.imageAvatar"
+                      :src="`http://localhost:5000/api/uploads/${comment.commentBy.imageAvatar}`"
+                      />
+                      <h5 class="sectionComHfive">{{comment.commentBy.name}}</h5>
+                    </div>
+                    <div class="comment-user-info">
+                      <p>{{comment.Comment}}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="comment-filed">
+                  <input type="text" v-model="comment" />
+                  <button @click="handleAddComment(item._id)">
+                    <i class="fa-regular fa-paper-plane"></i>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <Footer />
+    <Footer />
+  </body>
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapState } from "vuex";
 
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
@@ -117,7 +122,6 @@ export default {
       text: "",
       file: "",
       url: null,
-      feeds: [],
       comment: "",
       showCommentForm: false,
       commentOf: "",
@@ -125,15 +129,24 @@ export default {
   },
   computed: {
     ...mapGetters(["getLoggedUser", "getFeeds"]),
+    ...mapState(["feeds"]),
   },
   mounted() {
-    this.getAllFeeds().then((res) => {
-      console.log(res);
-      this.feeds = res.data;
-    });
+    this.getAllFeeds();
   },
   methods: {
     ...mapActions(["CreateFeed", "getAllFeeds", "likeFeed", "addComment"]),
+
+    isLiked(post, userid) {
+      for (var i = 0; i < post.likedBy.length; i++) {
+        console.log(post.likedBy[i]);
+        if (post.likedBy[i] == userid) {
+          return true;
+          break;
+        }
+      }
+      return false;
+    },
     selectFile(e) {
       console.log(e.target.files[0]);
       this.file = e.target.files[0];
@@ -167,24 +180,23 @@ export default {
         file: this.file,
         id: this.getLoggedUser._id,
       });
+      this.text = "";
+      this.file = "";
+      this.url = "";
     },
-    handleLikePost(id) {
-      this.likeFeed(id).then((res) => {
-        this.feeds.map((feed) => {
-          if (feed._id == id) {
-            feed.like = feed.like + 1;
-          }
-        });
-      });
+
+    handleLikePost(id, likedBy) {
+      this.likeFeed({ id, likedBy });
     },
     handleAddComment(id) {
-      this.addComment({
-        id,
-        Comment: this.comment,
-        commentBy: this.getLoggedUser._id,
-      }).then((res) => {
-        console.log(res.data);
-      });
+      if (this.comment !== "") {
+        this.addComment({
+          id,
+          Comment: this.comment,
+          commentBy: this.getLoggedUser._id,
+        });
+        this.comment = "";
+      }
     },
     handleCommentClick(id) {
       this.commentOf = id;
@@ -198,18 +210,27 @@ export default {
   width: 80%;
   margin: 0 auto;
 }
+body {
+  background: #111;
+}
 .write {
-  margin: 10px 0px;
+  margin: 44px 0px;
   position: relative;
+  background: #1b1b1b;
+  border-radius: 14px;
+  padding: 10px 18px 8px;
+  border: solid 1px lightgrey;
 }
 .write textarea {
   width: 100%;
+  border: 2px solid #333;
+  height: 60px;
+  border-radius: 13px;
 }
-
 .controlls {
   display: flex;
   align-content: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
 }
 .upload-btn-wrapper {
   position: relative;
@@ -221,7 +242,7 @@ export default {
   outline: none;
   border: 0px;
   color: gray;
-  background-color: white;
+  background: linear-gradient(-135deg, #ff9000, #c46f00);;
   padding: 8px 20px;
   border-radius: 8px;
   font-size: 15px;
@@ -235,20 +256,23 @@ export default {
   opacity: 0;
 }
 .send-button {
+  cursor: pointer;
   color: #111;
   background: linear-gradient(-135deg, #ff9000, #c46f00);
-  padding: 10px 14px;
   border: 0px;
+  width: 55px;
+  height: 33px;
   border-radius: 5px;
-  font-weight: bold;
+  font-family: "Poppins", sans-serif;;
   color: #fff;
 }
 
 .feed {
-  width: 80%;
+  width: 100%;
   background-color: #ffff;
   padding: 10px 12px;
   text-align: left;
+  background-color: #e8f1f3;
 }
 .feed-meta {
   display: flex;
@@ -257,6 +281,9 @@ export default {
 }
 .feed-meta img {
   border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
 }
 .feed-meta-user-info {
   margin-left: 20px;
@@ -264,34 +291,47 @@ export default {
 }
 .feed-meta-user-info h5 {
   padding: 0px;
+  text-transform: capitalize;
   margin: 0px;
+  color: lightgrey;
   font-size: 14px;
+}
+.comment-user-info h5 {
+  padding: 0;
+  margin: 0;
 }
 .feed-meta-user-info p {
   padding: 0px;
   margin: 0px;
+  color: lightgrey;
   font-size: 11px;
   opacity: 0.9;
 }
 .feed-container {
-  width: 80%;
+  width: 700px;
+  border: 1px solid lightgray;
   margin: 0 auto;
+  margin-bottom: 30px;
+  background: #1b1b1b;
+  border-radius: 14px;
 }
 .feed-body img {
-  margin-top: 14px;
-  width: 100%;
-  height: 400px;
+  height: 340px;
+  width: 90%;
+  border-radius: 20px;
 }
 .feed-body p {
   text-align: left;
+  color: lightgrey;
+  text-align: center;
+  word-wrap: break-word;
 }
 .single-feed {
   margin-bottom: 20px;
+  padding: 10px 20px 10px;
 }
 .border {
   margin-top: 15px;
-  border-bottom: 1px solid #333;
-  border-top: 1px solid #333;
 }
 .feed-buttons {
   margin: 14px 25px;
@@ -302,29 +342,47 @@ export default {
 .feed-buttons button {
   border: none;
   background: none;
+  color: lightgrey;
   font-weight: bold;
 }
 .feed-likes {
-  color: blue;
+  color: lightgrey;
   text-align: left;
   margin: 10px 0px;
 }
 .comments-container {
-  background-color: #eee;
+  border-radius: 13px;
+  padding: 0px 10px;
 }
 .comment-filed {
   width: 100%;
   margin: 0 auto;
   height: 60px;
-  /* background-color: #eee; */
   border-radius: 10px;
   position: relative;
+  margin-top: 10px;
+}
+.sectionComment {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2px;
+}
+.sectionComImg {
+  margin-right: 18px;
+}
+.sectionComHfive {
+  text-transform: capitalize;
+  color: lightgrey;
+  font-size: 14px;
 }
 .comment-filed input {
   width: 100%;
   height: 40px;
   border-radius: 10px;
   border: 1px solid #333;
+  box-sizing: border-box;
+  padding-right: 45px;
 }
 .comment-filed input:active {
   border: 1px solid #333;
@@ -342,37 +400,60 @@ export default {
 .comments {
   margin-top: 10px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   padding: 10px 20px;
+  border-radius: 10px;
+  border: 1px lightgrey solid;
 }
 .comment {
   padding: 5px 10px;
-  display: inline-flex;
   align-items: center;
-  text-align: left;
-  background-color: #fff;
-  width: auto;
+  background-color: #1b1b1b;
+  width: 100%;
   border-radius: 9px;
 }
 .comment img {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  object-fit: cover;
+  height: 50px;
+  margin-bottom: 6px;
   border-radius: 50%;
-  border: 1px solid #eeee;
 }
-.comment-user-info h5 {
-  padding: 0;
-  margin: 0;
+.comment-user-info {
+  width: 100%;
 }
 .comment-user-info p {
   padding: 0;
   margin: 0;
+  word-wrap: break-word;
 }
 .feed-status {
   display: flex;
   align-items: center;
+  justify-content: space-evenly;
 }
 .feed-comments {
   margin-left: 10px;
+  color: lightgrey;
+}
+.image-preview img {
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+}
+@media (max-width: 920px) {
+  .feed-container {
+    width: 100%;
+  }
+}
+@media (max-width: 570px) {
+  .feed-images {
+    width: 100%;
+    height: 200px !important;
+  }
+  .image-profile {
+    width: 45px;
+    height: 45px;
+  }
 }
 </style>

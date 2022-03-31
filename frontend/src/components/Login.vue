@@ -1,44 +1,36 @@
 <template>
-  <body>
-    <div class="wrapper">
-      <h2 class="title">Login Groupomania</h2>
-      <form @submit.prevent="handleLogIn">
-        <div class="alert" v-if="LoginError">{{ this.LoginErrorMessage }}</div>
-        <div class="field">
-          <input
-            type="email"
-            placeholder="Email Address"
-            v-model="user.email"
-          />
-          <p class="error" v-if="error.email">{{ error.email }}</p>
+<body>
+  <div class="wrapper">
+    <h2 class="title">Login Groupomania</h2>
+    <form @submit.prevent="handleLogIn">
+      <div class="alert" v-if="LoginError">{{this.LoginErrorMessage}}</div>
+      <div class="field">
+        <input type="email" placeholder="Email Address" v-model="user.email" />
+        <p class="error" v-if="error.email">{{error.email}}</p>
+      </div>
+      <div class="field">
+        <input type="password" placeholder="Password" v-model="user.password" />
+        <p class="error" v-if="error.password">{{error.password}}</p>
+      </div>
+      <div class="content">
+        <div class="checkbox">
+          <input type="checkbox" id="remember-me" />
+          <label for="remember-me">Remember me</label>
         </div>
-        <div class="field">
-          <input
-            type="password"
-            placeholder="Password"
-            v-model="user.password"
-          />
-          <p class="error" v-if="error.password">{{ error.password }}</p>
+        <div class="pass-link">
+          <a href="#">Forgot password?</a>
         </div>
-        <div class="content">
-          <div class="checkbox">
-            <input type="checkbox" id="remember-me" />
-            <label for="remember-me">Remember me</label>
-          </div>
-          <div class="pass-link">
-            <a href="#">Forgot password?</a>
-          </div>
-        </div>
-        <div class="field">
-          <input type="submit" value="Login" />
-        </div>
-        <div class="signup-link">
-          Not a member?
-          <a href="/sign">Signup now</a>
-        </div>
-      </form>
-    </div>
-  </body>
+      </div>
+      <div class="field">
+        <input type="submit" value="Login" />
+      </div>
+      <div class="signup-link">
+        Not a member?
+        <a href="/sign">Signup now</a>
+      </div>
+    </form>
+  </div>
+</body>
 </template>
 
 <script>
@@ -125,7 +117,7 @@ body {
   background: linear-gradient(-135deg, #ff9000, #c46f00);
 }
 .wrapper form {
-  padding: 10px 30px 50px 30px;
+  padding: 10px 30px 40px 30px;
 }
 ::placeholder {
   color: lightgrey;
@@ -133,7 +125,7 @@ body {
 .wrapper form .field {
   height: 50px;
   width: 100%;
-  margin-top: 40px;
+  margin-top: 20px;
   position: relative;
 }
 .wrapper form .field input {
@@ -158,7 +150,7 @@ form .content {
   font-size: 16px;
   align-items: center;
   justify-content: space-around;
-  margin-top: 30px;
+  margin-top: 20px;
 }
 form .content .checkbox {
   display: flex;
@@ -235,8 +227,11 @@ form .signup-link a:hover {
 }
 .error {
   text-align: left !important;
-  padding: 6px 2px;
-  color: red;
+  padding: 1px 2px;
+  color: #DE5D5D;
+  display: flex;
+  font-size: 12px;
+  justify-content: center;
 }
 .alert {
   position: relative;
@@ -249,3 +244,4 @@ form .signup-link a:hover {
   border-color: #f5c2c7;
 }
 </style>
+
