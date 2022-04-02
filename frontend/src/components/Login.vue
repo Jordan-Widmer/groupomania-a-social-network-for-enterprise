@@ -1,36 +1,44 @@
 <template>
-<body>
-  <div class="wrapper">
-    <h2 class="title">Login Groupomania</h2>
-    <form @submit.prevent="handleLogIn">
-      <div class="alert" v-if="LoginError">{{this.LoginErrorMessage}}</div>
-      <div class="field">
-        <input type="email" placeholder="Email Address" v-model="user.email" />
-        <p class="error" v-if="error.email">{{error.email}}</p>
-      </div>
-      <div class="field">
-        <input type="password" placeholder="Password" v-model="user.password" />
-        <p class="error" v-if="error.password">{{error.password}}</p>
-      </div>
-      <div class="content">
-        <div class="checkbox">
-          <input type="checkbox" id="remember-me" />
-          <label for="remember-me">Remember me</label>
+  <body>
+    <div class="wrapper">
+      <h2 class="title">Login Groupomania</h2>
+      <form @submit.prevent="handleLogIn">
+        <div class="alert" v-if="LoginError">{{ this.LoginErrorMessage }}</div>
+        <div class="field">
+          <input
+            type="email"
+            placeholder="Email Address"
+            v-model="user.email"
+          />
+          <p class="error" v-if="error.email">{{ error.email }}</p>
         </div>
-        <div class="pass-link">
-          <a href="#">Forgot password?</a>
+        <div class="field">
+          <input
+            type="password"
+            placeholder="Password"
+            v-model="user.password"
+          />
+          <p class="error" v-if="error.password">{{ error.password }}</p>
         </div>
-      </div>
-      <div class="field">
-        <input type="submit" value="Login" />
-      </div>
-      <div class="signup-link">
-        Not a member?
-        <a href="/sign">Signup now</a>
-      </div>
-    </form>
-  </div>
-</body>
+        <div class="content">
+          <div class="checkbox">
+            <input type="checkbox" id="remember-me" />
+            <label for="remember-me">Remember me</label>
+          </div>
+          <div class="pass-link">
+            <a href="#">Forgot password?</a>
+          </div>
+        </div>
+        <div class="field">
+          <input type="submit" value="Login" />
+        </div>
+        <div class="signup-link">
+          Not a member?
+          <a href="/sign">Signup now</a>
+        </div>
+      </form>
+    </div>
+  </body>
 </template>
 
 <script>
@@ -228,7 +236,7 @@ form .signup-link a:hover {
 .error {
   text-align: left !important;
   padding: 1px 2px;
-  color: #DE5D5D;
+  color: #de5d5d;
   display: flex;
   font-size: 12px;
   justify-content: center;

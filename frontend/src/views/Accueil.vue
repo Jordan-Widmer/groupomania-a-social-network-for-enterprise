@@ -10,7 +10,12 @@
               <button class="btn">
                 <i class="fa-solid fa-paperclip"></i>
               </button>
-              <input type="file" name="myfile" accept="image/*" @change="selectFile($event)" />
+              <input
+                type="file"
+                name="myfile"
+                accept="image/*"
+                @change="selectFile($event)"
+              />
             </div>
             <input type="submit" class="send-button" value="Send" />
           </div>
@@ -20,7 +25,7 @@
         </div>
       </form>
       <div class="feeds">
-        <div class="feed-container" v-for="(item , index) in feeds" :key="index">
+        <div class="feed-container" v-for="(item, index) in feeds" :key="index">
           <div class="single-feed">
             <div class="feed-meta">
               <img
@@ -31,12 +36,23 @@
                 height="50"
               />
               <div class="feed-meta-user-info">
-                <h5 v-if="item.addedBy[0]">{{item.addedBy[0].name}}</h5>
-                <p>{{formateDate(item.addedAt)}}</p>
+                <h5 v-if="item.addedBy[0]">{{ item.addedBy[0].name }}</h5>
+                <p>{{ formateDate(item.addedAt) }}</p>
+                <div
+                  v-if="
+                    isMyPost(item.addedBy[0]._id, getLoggedUser._id) == true
+                  "
+                  class="comment-controlls"
+                >
+                  <a to="#" @click="handleOnEditPost(item._id)">Edit</a>
+                  <a to="#" @click="handleDeleteFeed(item._id, comment._id)"
+                    >Delete</a
+                  >
+                </div>
               </div>
             </div>
             <div class="feed-body">
-              <p>{{item.Text}}</p>
+              <p>{{ item.Text }}</p>
               <img
                 class="feed-images"
                 v-if="item.image"
@@ -47,12 +63,12 @@
               <div class="feed-status">
                 <div class="feed-likes">
                   <i class="fa-solid fa-thumbs-up"></i>
-                  {{item.likedBy.length}}
+                  {{ item.likedBy.length }}
                 </div>
 
                 <div class="feed-comments">
                   <i class="fa-regular fa-message"></i>
-                  {{item.comments.length}}
+                  {{ item.comments.length }}
                 </div>
               </div>
               <div class="border">
@@ -60,11 +76,16 @@
                   <button
                     type="button"
                     v-if="isLiked(item, getLoggedUser._id) === false"
-                    @click="!handleLikePost(item._id , getLoggedUser._id )"
+                    @click="!handleLikePost(item._id, getLoggedUser._id)"
                   >
                     <i class="fa-regular fa-thumbs-up"></i> Like
                   </button>
-                  <button v-else type="button " class="feed-likes">
+                  <button
+                    v-else
+                    type="button "
+                    @click="handleDisLikePost(item._id, getLoggedUser._id)"
+                    class="feed-likes"
+                  >
                     <i class="fa-solid fa-thumbs-up"></i> Liked
                   </button>
 
@@ -73,18 +94,46 @@
                   </button>
                 </div>
               </div>
-              <div class="comments-container" v-if="showCommentForm == true && item._id == commentOf">
-                <div class="comments" v-for="(comment , index) in item.comments" :key="index">
+              <div
+                class="comments-container"
+                v-if="showCommentForm == true && item._id == commentOf"
+              >
+                <div
+                  class="comments"
+                  v-for="(comment, index) in item.comments"
+                  :key="index"
+                >
                   <div class="comment">
                     <div class="sectionComment">
-                      <img class="sectionComImg"
-                      v-if="comment.commentBy.imageAvatar"
-                      :src="`http://localhost:5000/api/uploads/${comment.commentBy.imageAvatar}`"
+                      <img
+                        class="sectionComImg"
+                        v-if="comment.commentBy.imageAvatar"
+                        :src="`http://localhost:5000/api/uploads/${comment.commentBy.imageAvatar}`"
                       />
-                      <h5 class="sectionComHfive">{{comment.commentBy.name}}</h5>
+                      <h5 class="sectionComHfive">
+                        {{ comment.commentBy.name }}
+                      </h5>
                     </div>
                     <div class="comment-user-info">
-                      <p>{{comment.Comment}}</p>
+                      <p>{{ comment.Comment }}</p>
+                      <div
+                        v-if="
+                          isMyComment(
+                            comment.commentBy._id,
+                            getLoggedUser._id
+                          ) == true
+                        "
+                        class="comment-controlls"
+                      >
+                        <a to="#" @click="handleOnEdit(item._id, comment._id)"
+                          >Edit</a
+                        >
+                        <a
+                          @click="handleDeleteComment(item._id, comment._id)"
+                          to="#"
+                          >Delete</a
+                        >
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -104,7 +153,6 @@
     <Footer />
   </body>
 </template>
-
 <script>
 import { mapGetters, mapActions, mapState } from "vuex";
 
@@ -125,6 +173,13 @@ export default {
       comment: "",
       showCommentForm: false,
       commentOf: "",
+      edit: false,
+      currentEditComment: {
+        postId: "",
+        commentId: "",
+      },
+      editFeed: false,
+      currentFeed: {},
     };
   },
   computed: {
@@ -135,15 +190,36 @@ export default {
     this.getAllFeeds();
   },
   methods: {
-    ...mapActions(["CreateFeed", "getAllFeeds", "likeFeed", "addComment"]),
+    ...mapActions([
+      "CreateFeed",
+      "getAllFeeds",
+      "likeFeed",
+      "addComment",
+      "dislikedFeed",
+      "deleteComment",
+      "EditComment",
+      "EditFeed",
+      "deleteFeed",
+    ]),
 
+    isMyPost(postaddedBy, userId) {
+      if (postaddedBy == userId) {
+        return true;
+      }
+      return false;
+    },
     isLiked(post, userid) {
       for (var i = 0; i < post.likedBy.length; i++) {
-        console.log(post.likedBy[i]);
         if (post.likedBy[i] == userid) {
           return true;
           break;
         }
+      }
+      return false;
+    },
+    isMyComment(postid, userid) {
+      if (postid == userid) {
+        return true;
       }
       return false;
     },
@@ -175,6 +251,21 @@ export default {
       return `${datee} ${monthName}, ${year}`;
     },
     handleCreateFeed() {
+      if (this.editFeed == true) {
+        const feed = {};
+        feed.text = this.text;
+        feed.id = this.currentFeed._id;
+        if (this.file) {
+          feed.file = this.file;
+        }
+        this.EditFeed({ ...feed });
+        this.editFeed = false;
+        this.currentFeed = {};
+        this.text = "";
+        this.url = null;
+        this.file = [];
+        return;
+      }
       this.CreateFeed({
         text: this.text,
         file: this.file,
@@ -184,12 +275,35 @@ export default {
       this.file = "";
       this.url = "";
     },
+    handleOnEdit(postId, commentId) {
+      this.edit = true;
+      this.currentEditComment.postId = postId;
+      this.currentEditComment.commentId = commentId;
 
+      const currentpost = this.feeds.filter((f) => f._id == postId);
+      const comments = currentpost[0].comments.filter(
+        (c) => c._id == commentId
+      );
+      this.comment = comments[0].Comment;
+    },
     handleLikePost(id, likedBy) {
       this.likeFeed({ id, likedBy });
     },
+    handleDisLikePost(id, dislikedBy) {
+      this.dislikedFeed({ id, dislikedBy });
+    },
     handleAddComment(id) {
       if (this.comment !== "") {
+        if (this.edit == true) {
+          this.EditComment({
+            id: this.currentEditComment.postId,
+            commentId: this.currentEditComment.commentId,
+            comment: this.comment,
+          });
+          this.edit = false;
+          this.comment = "";
+          return;
+        }
         this.addComment({
           id,
           Comment: this.comment,
@@ -198,9 +312,24 @@ export default {
         this.comment = "";
       }
     },
+    handleDeleteComment(id, commentid) {
+      this.deleteComment({ id, commentid });
+    },
     handleCommentClick(id) {
       this.commentOf = id;
       this.showCommentForm = true;
+    },
+    handleOnEditPost(feedId) {
+      this.currentFeed = this.feeds.filter((f) => f._id == feedId)[0];
+      this.editFeed = true;
+      this.text = this.currentFeed.Text;
+      if (this.currentFeed.image) {
+        this.url =
+          "http://localhost:5000/api/uploads/" + this.currentFeed.image;
+      }
+    },
+    handleDeleteFeed(feedId) {
+      this.deleteFeed({ id: feedId });
     },
   },
 };
@@ -241,8 +370,8 @@ body {
 .btn {
   outline: none;
   border: 0px;
-  color: gray;
-  background: linear-gradient(-135deg, #ff9000, #c46f00);;
+  color: #111;
+  background: linear-gradient(-135deg, #ff9000, #c46f00);
   padding: 8px 20px;
   border-radius: 8px;
   font-size: 15px;
@@ -258,13 +387,14 @@ body {
 .send-button {
   cursor: pointer;
   color: #111;
+  letter-spacing: 1px;
   background: linear-gradient(-135deg, #ff9000, #c46f00);
   border: 0px;
   width: 55px;
   height: 33px;
   border-radius: 5px;
-  font-family: "Poppins", sans-serif;;
-  color: #fff;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
 }
 
 .feed {
@@ -437,9 +567,11 @@ body {
   color: lightgrey;
 }
 .image-preview img {
-  width: 400px;
-  height: 400px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
+  object-fit: cover;
+  margin-top: 20px;
 }
 @media (max-width: 920px) {
   .feed-container {
@@ -455,5 +587,13 @@ body {
     width: 45px;
     height: 45px;
   }
+}
+.post-controlls a,
+.comment-controlls a {
+  color: lightgrey;
+  cursor: pointer;
+  text-decoration: none;
+  margin-right: 10px;
+  font-size: 10px;
 }
 </style>
