@@ -387,14 +387,13 @@ body {
 .send-button {
   cursor: pointer;
   color: #111;
-  letter-spacing: 1px;
   background: linear-gradient(-135deg, #ff9000, #c46f00);
   border: 0px;
   width: 55px;
   height: 33px;
+  font-weight: 500;
   border-radius: 5px;
   font-family: "Poppins", sans-serif;
-  font-weight: 500;
 }
 
 .feed {
@@ -569,9 +568,9 @@ body {
 .image-preview img {
   width: 200px;
   height: 200px;
-  border-radius: 50%;
-  object-fit: cover;
   margin-top: 20px;
+  object-fit: cover;
+  border-radius: 50%;
 }
 @media (max-width: 920px) {
   .feed-container {
@@ -590,10 +589,10 @@ body {
 }
 .post-controlls a,
 .comment-controlls a {
-  color: lightgrey;
-  cursor: pointer;
   text-decoration: none;
   margin-right: 10px;
   font-size: 10px;
+  color: lightgrey;
+  cursor: pointer;
 }
 </style>
