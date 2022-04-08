@@ -137,7 +137,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #000000;
+  /* background: #000000; */
+  background-image: url("../assets/background.jpg");
 }
 .wrapper {
   max-width: 430px;
@@ -291,9 +292,9 @@ nav .logo img {
   margin-bottom: 1rem;
   border: 1px solid transparent;
   border-radius: 0.25rem;
-  color: #842029;
-  background-color: #f8d7da;
-  border-color: #f5c2c7;
+  color: black;
+  background-color: #86ffa4;
+  border-color: #0bff07;
 }
 .error {
   text-align: left !important;

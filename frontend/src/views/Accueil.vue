@@ -2,9 +2,19 @@
   <body>
     <Header />
     <div class="container">
-      <form @submit.prevent="handleCreateFeed">
-        <div class="write">
-          <textarea name id cols="100" rows="5" v-model="text"></textarea>
+      <form
+        @submit.prevent="handleCreateFeed"
+        style="display: flex; justify-content: center"
+      >
+        <div class="write" style="cursor: pointer">
+          <textarea
+            name
+            id
+            cols="100"
+            rows="5"
+            v-model="text"
+            placeholder="Write your post"
+          ></textarea>
           <div class="controlls">
             <div class="upload-btn-wrapper">
               <button class="btn">
@@ -139,7 +149,11 @@
                 </div>
 
                 <div class="comment-filed">
-                  <input type="text" v-model="comment" />
+                  <input
+                    type="text"
+                    v-model="comment"
+                    placeholder="Write your comment"
+                  />
                   <button @click="handleAddComment(item._id)">
                     <i class="fa-regular fa-paper-plane"></i>
                   </button>
@@ -150,6 +164,7 @@
         </div>
       </div>
     </div>
+    <div class="space"></div>
     <Footer />
   </body>
 </template>
@@ -342,6 +357,9 @@ export default {
 body {
   background: #111;
 }
+.space {
+  margin-top: 90px;
+}
 .write {
   margin: 44px 0px;
   position: relative;
@@ -350,11 +368,19 @@ body {
   padding: 10px 18px 8px;
   border: solid 1px lightgrey;
 }
+.write:hover {
+  border: 1px solid #ff9000;
+  background: #212020;
+  transition: 0.3s;
+}
 .write textarea {
-  width: 100%;
+  width: calc(820px - 18px);
   border: 2px solid #333;
   height: 60px;
+  font-size: 16px;
+  padding-left: 10px;
   border-radius: 13px;
+  outline: none;
 }
 .controlls {
   display: flex;
@@ -423,7 +449,9 @@ body {
   text-transform: capitalize;
   margin: 0px;
   color: lightgrey;
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 400;
+  font-family: "Poppins";
 }
 .comment-user-info h5 {
   padding: 0;
@@ -433,26 +461,38 @@ body {
   padding: 0px;
   margin: 0px;
   color: lightgrey;
-  font-size: 11px;
-  opacity: 0.9;
+  font-family: "Poppins";
+  font-size: 12px;
 }
 .feed-container {
   width: 700px;
   border: 1px solid lightgray;
   margin: 0 auto;
-  margin-bottom: 30px;
+  margin-bottom: 16px;
   background: #1b1b1b;
   border-radius: 14px;
 }
+.feed-container:hover {
+  transition: 0.3s;
+  border: 1px solid #ff9000;
+  background: #212020;
+  cursor: pointer;
+}
+.feed-body {
+  margin: 0px 6px;
+}
 .feed-body img {
   height: 340px;
-  width: 90%;
-  border-radius: 20px;
+  width: 100%;
+  border-radius: 16px;
+  object-fit: cover;
 }
 .feed-body p {
   text-align: left;
   color: lightgrey;
-  text-align: center;
+  font-family: "Poppins";
+  margin-bottom: 8px;
+  /* text-align: center; */
   word-wrap: break-word;
 }
 .single-feed {
@@ -472,7 +512,15 @@ body {
   border: none;
   background: none;
   color: lightgrey;
-  font-weight: bold;
+  font-family: "Poppins";
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+.feed-buttons button:hover {
+  color: #111;
+  background: linear-gradient(-135deg, #ff9000, #c46f00);
 }
 .feed-likes {
   color: lightgrey;
@@ -482,6 +530,10 @@ body {
 .comments-container {
   border-radius: 13px;
   padding: 0px 10px;
+}
+.fa-message,
+.fa-thumbs-up {
+  margin-right: 8px;
 }
 .comment-filed {
   width: 100%;
@@ -495,7 +547,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 2px;
 }
 .sectionComImg {
   margin-right: 18px;
@@ -503,11 +554,16 @@ body {
 .sectionComHfive {
   text-transform: capitalize;
   color: lightgrey;
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 400;
+  font-family: "Poppins";
 }
 .comment-filed input {
   width: 100%;
   height: 40px;
+  font-size: 16px;
+  outline: none;
+  padding-left: 10px;
   border-radius: 10px;
   border: 1px solid #333;
   box-sizing: border-box;
@@ -537,7 +593,7 @@ body {
 .comment {
   padding: 5px 10px;
   align-items: center;
-  background-color: #1b1b1b;
+  /* background-color: #1b1b1b; */
   width: 100%;
   border-radius: 9px;
 }
@@ -545,7 +601,7 @@ body {
   width: 50px;
   object-fit: cover;
   height: 50px;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   border-radius: 50%;
 }
 .comment-user-info {
@@ -555,6 +611,7 @@ body {
   padding: 0;
   margin: 0;
   word-wrap: break-word;
+  text-align: center;
 }
 .feed-status {
   display: flex;
@@ -576,6 +633,9 @@ body {
   .feed-container {
     width: 100%;
   }
+  .write textarea {
+    width: calc(100% - 18px);
+  }
 }
 @media (max-width: 570px) {
   .feed-images {
@@ -591,8 +651,18 @@ body {
 .comment-controlls a {
   text-decoration: none;
   margin-right: 10px;
-  font-size: 10px;
+  font-size: 13px;
+  font-family: "Poppins";
   color: lightgrey;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+.post-controlls a,
+.comment-controlls a:hover {
+  color: #111;
+  font-weight: 500;
+  background: linear-gradient(-135deg, #ff9000, #c46f00);
+  padding: 0px 8px;
+  border-radius: 3px;
 }
 </style>

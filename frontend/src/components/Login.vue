@@ -1,7 +1,10 @@
 <template>
   <body>
     <div class="wrapper">
-      <h2 class="title">Login Groupomania</h2>
+      <h2 class="title">
+        Login <br />
+        Groupomania
+      </h2>
       <form @submit.prevent="handleLogIn">
         <div class="alert" v-if="LoginError">{{ this.LoginErrorMessage }}</div>
         <div class="field">
@@ -100,8 +103,9 @@ body {
   min-height: 100vh;
   display: flex;
   align-items: center;
+  background-image: url("../assets/background.jpg");
   justify-content: center;
-  background: #000000;
+  /* background: #000000; */
   padding: 30px;
 }
 ::selection {
@@ -111,29 +115,30 @@ body {
 .wrapper {
   width: 380px;
   background: #1b1b1b;
-  border-radius: 15px;
+  border-radius: 6px;
+  padding-top: 34px;
   box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.1);
 }
 .wrapper .title {
-  font-size: 32px;
+  font-size: 35px;
   font-weight: 600;
   text-align: center;
-  line-height: 100px;
-  color: #000000;
+  /* line-height: 100px; */
+  color: #e2e2e2;
   user-select: none;
   border-radius: 15px 15px 0 0;
-  background: linear-gradient(-135deg, #ff9000, #c46f00);
+  /* background: linear-gradient(-135deg, #ff9000, #c46f00); */
 }
 .wrapper form {
-  padding: 10px 30px 40px 30px;
+  padding: 0px 30px 40px 30px;
 }
 ::placeholder {
   color: lightgrey;
 }
 .wrapper form .field {
-  height: 50px;
+  height: 52px;
   width: 100%;
-  margin-top: 20px;
+  margin-top: 26px;
   position: relative;
 }
 .wrapper form .field input {
@@ -144,7 +149,8 @@ body {
   font-size: 17px;
   padding-left: 20px;
   color: lightgrey;
-  border: 1px solid lightgrey;
+  border: 1px solid #ff9000;
+  border-bottom-width: 2.5px;
   border-radius: 6px;
   transition: all 0.3s ease;
 }
@@ -158,7 +164,7 @@ form .content {
   font-size: 16px;
   align-items: center;
   justify-content: space-around;
-  margin-top: 20px;
+  margin-top: 14px;
 }
 form .content .checkbox {
   display: flex;
@@ -173,7 +179,9 @@ form .content input {
 form .content label {
   color: #e2e2e2;
   user-select: none;
+  font-weight: 500;
   padding-left: 5px;
+  font-size: 14px;
 }
 form .content .pass-link {
   color: "";
@@ -196,11 +204,14 @@ form .signup-link {
   color: #e2e2e2;
   margin-top: 20px;
   text-align: center;
+  font-weight: 500;
+  font-size: 14px;
 }
 form .pass-link a,
 form .signup-link a {
   color: #ff9000;
   text-decoration: none;
+  font-size: 14px;
 }
 form .pass-link a:hover,
 form .signup-link a:hover {
@@ -211,16 +222,17 @@ form .signup-link a:hover {
   body {
     padding: unset;
   }
-  form .content label {
+  /* form .content label {
     font-size: 14px;
-  }
+  } */
   form .pass-link a,
   form .signup-link a {
     font-size: 14px;
   }
   .wrapper .title {
     border-radius: unset;
-    font-size: 33px;
+    font-size: 35px;
+    font-weight: 600;
   }
   .wrapper {
     border-radius: unset;
@@ -230,7 +242,7 @@ form .signup-link a:hover {
 @media (max-width: 340px) {
   .wrapper .title {
     border-radius: unset;
-    font-size: 31px;
+    /* font-size: 31px; */
   }
 }
 .error {

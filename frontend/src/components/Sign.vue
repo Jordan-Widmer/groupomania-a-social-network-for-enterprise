@@ -136,7 +136,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #000000;
+  background-image: url("../assets/background.jpg");
+  /* background: #000000; */
 }
 .wrapper {
   position: relative;
