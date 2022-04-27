@@ -612,6 +612,7 @@ body {
   margin: 0;
   word-wrap: break-word;
   text-align: center;
+  margin-bottom: 6px;
 }
 .feed-status {
   display: flex;
