@@ -92,7 +92,7 @@ export default createStore({
           },
         })
         .then((res) => {
-          console.log(res)
+          console.log(res);
           commit("GETALLFEEDS", res.data);
         });
     },
@@ -104,8 +104,8 @@ export default createStore({
           },
         })
         .then((response) => {
-          undefined
-          console.log(response.data)
+          undefined;
+          console.log(response.data);
           commit("SAVEUSER", response.data);
           commit("LOGGEDIN", true);
           router.push("/login").catch((e) => {
@@ -118,7 +118,7 @@ export default createStore({
         });
     },
     UpdateProfile({ commit }, payload) {
-      console.log(payload)
+      console.log(payload);
       const formData = new FormData();
       if (payload.file) {
         formData.append("file", payload.file);
@@ -164,7 +164,7 @@ export default createStore({
             console.log(e);
           });
         })
-        .catch((error) => { });
+        .catch((error) => {});
     },
 
     Login({ commit }, payload) {
@@ -181,8 +181,7 @@ export default createStore({
             router.push("/dashboard").catch((e) => {
               console.log(e);
             });
-          }
-          else if (response.data.isAdmin == 0) {
+          } else if (response.data.isAdmin == 0) {
             router.push("/acceuil").catch((e) => {
               console.log(e);
             });
@@ -215,12 +214,12 @@ export default createStore({
           },
         })
         .then((response) => {
-          dispatch('getAllFeeds');
+          dispatch("getAllFeeds");
 
           // commit("UPDATEFEED", response.data);
           // console.log(response.data);
         })
-        .catch((error) => { });
+        .catch((error) => {});
     },
     CreateFeed({ commit, dispatch }, payload) {
       const formData = new FormData();
@@ -236,9 +235,9 @@ export default createStore({
         })
         .then((response) => {
           commit("AddNewFeed", response.data);
-          dispatch('getAllFeeds');
+          dispatch("getAllFeeds");
         })
-        .catch((error) => { });
+        .catch((error) => {});
     },
     deleteFeed({ commit, dispatch }, payload) {
       axios
@@ -249,7 +248,7 @@ export default createStore({
         })
         .then((res) => {
           console.log(res);
-          dispatch('getAllFeeds');
+          dispatch("getAllFeeds");
         });
     },
 
@@ -262,7 +261,7 @@ export default createStore({
         })
         .then((res) => {
           console.log(res);
-          dispatch('getAllFeeds');
+          dispatch("getAllFeeds");
 
           // commit("UPDATEFEEDLike", res.data);
         });
@@ -276,7 +275,7 @@ export default createStore({
         })
         .then((res) => {
           console.log(res);
-          dispatch('getAllFeeds');
+          dispatch("getAllFeeds");
           // commit("UPDATEFEEDLike", res.data);
         });
     },
@@ -297,7 +296,7 @@ export default createStore({
         })
         .then((res) => {
           console.log(res);
-          dispatch('getAllFeeds');
+          dispatch("getAllFeeds");
           commit("UPDATEFEEDCOMMENT", res.data);
         });
     },
@@ -310,7 +309,7 @@ export default createStore({
         })
         .then((res) => {
           // commit("UPDATEFEEDCOMMENT", res.data);
-          dispatch('getAllFeeds');
+          dispatch("getAllFeeds");
         });
     },
 
@@ -327,7 +326,7 @@ export default createStore({
         )
         .then((res) => {
           console.log(res);
-          dispatch('getAllFeeds');
+          dispatch("getAllFeeds");
           commit("UPDATEFEEDCOMMENT", res.data);
         });
     },

@@ -11,7 +11,7 @@ const pool = mysql.createPool({
   user: "root",
   password: "",
   database: "Groupomania",
-  port: 3307
+  port: 3307,
 });
 const tablename = "Posts";
 

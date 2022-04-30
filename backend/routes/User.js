@@ -6,8 +6,6 @@ const multer = require("multer");
 const fs = require("fs");
 const UserController = require("../controllers/User.controller");
 
-
-
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const uploadPath = path.resolve();

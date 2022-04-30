@@ -1,135 +1,163 @@
 <template>
-<body>
-  <Header />
-  <div class="container">
-    <form @submit.prevent="handleCreateFeed" style="display: flex; justify-content: center">
-      <div class="write" style="cursor: pointer">
-        <textarea name id cols="100" rows="5" v-model="text" placeholder="Write your post"></textarea>
-        <div class="controlls">
-          <div class="upload-btn-wrapper">
-            <button class="btn">
-              <i class="fa-solid fa-paperclip"></i>
-            </button>
-            <input type="file" name="myfile" accept="image/*" @change="selectFile($event)" />
+  <body>
+    <Header />
+    <div class="container">
+      <form
+        @submit.prevent="handleCreateFeed"
+        style="display: flex; justify-content: center"
+      >
+        <div class="write" style="cursor: pointer">
+          <textarea
+            name
+            id
+            cols="100"
+            rows="5"
+            v-model="text"
+            placeholder="Write your post"
+          ></textarea>
+          <div class="controlls">
+            <div class="upload-btn-wrapper">
+              <button class="btn">
+                <i class="fa-solid fa-paperclip"></i>
+              </button>
+              <input
+                type="file"
+                name="myfile"
+                accept="image/*"
+                @change="selectFile($event)"
+              />
+            </div>
+            <input type="submit" class="send-button" value="Send" />
           </div>
-          <input type="submit" class="send-button" value="Send" />
-        </div>
-        <div class="image-preview" v-if="url">
-          <img :src="url" alt width="100" height="100" />
-        </div>
-      </div>
-    </form>
-    <div class="feeds">
-      <div class="feed-container" v-for="(item, index) in feeds" :key="index">
-        <div class="single-feed">
-          <div class="feed-meta">
-            <img
-              class="image-profile"
-              v-if="item.addedBy"
-              :src="`http://localhost:5000/api/uploads/${item.img}`"
-              width="50"
-              height="50"
-            />
-            <div class="feed-meta-user-info">
-              <h5 v-if="item.addedBy">{{ item.name }}</h5>
-              <div
-                v-if="
-                    isMyPost(item.addedBy, getLoggedUser.id) == true
-                  "
-                class="comment-controlls"
-              >
-                <a to="#" @click="handleOnEditPost(item.id)">Edit</a>
-                <a to="#" @click="handleDeleteFeed(item.id, comment.id)">Delete</a>
-              </div>
-            </div>
+          <div class="image-preview" v-if="url">
+            <img :src="url" alt width="100" height="100" />
           </div>
-          <div class="feed-body">
-            <p>{{ item.text }}</p>
-            <img
-              class="feed-images"
-              v-if="item.image"
-              :src="`http://localhost:5000/api/uploads/${item.image}`"
-              alt="hello"
-              width="500"
-            />
-            <div class="feed-status">
-              <div class="feed-likes">
-                <i class="fa-solid fa-thumbs-up"></i>
-                {{ item.likes.length > 0 ? (item.likes[0].length) : 0 }}
-              </div>
-
-              <div class="feed-comments">
-                <i class="fa-regular fa-message"></i>
-                {{ item.comments.length > 0 ? (item.comments[0].length) : 0}}
+        </div>
+      </form>
+      <div class="feeds">
+        <div class="feed-container" v-for="(item, index) in feeds" :key="index">
+          <div class="single-feed">
+            <div class="feed-meta">
+              <img
+                class="image-profile"
+                v-if="item.addedBy"
+                :src="`http://localhost:5000/api/uploads/${item.img}`"
+                width="50"
+                height="50"
+              />
+              <div class="feed-meta-user-info">
+                <h5 v-if="item.addedBy">{{ item.name }}</h5>
+                <div
+                  v-if="isMyPost(item.addedBy, getLoggedUser.id) == true"
+                  class="comment-controlls"
+                >
+                  <a to="#" @click="handleOnEditPost(item.id)">Edit</a>
+                  <a to="#" @click="handleDeleteFeed(item.id, comment.id)"
+                    >Delete</a
+                  >
+                </div>
               </div>
             </div>
-            <div class="border">
-              <div class="feed-buttons">
-                <button
-                  type="button"
-                  v-if="isLiked(item, getLoggedUser.id) === false"
-                  @click="!handleLikePost(item.id, getLoggedUser.id)"
-                >
-                  <i class="fa-regular fa-thumbs-up"></i> Like
-                </button>
-                <button
-                  v-else
-                  type="button "
-                  @click="handleDisLikePost(item.id, getLoggedUser.id)"
-                  class="feed-likes"
-                >
-                  <i class="fa-solid fa-thumbs-up"></i> Liked
-                </button>
+            <div class="feed-body">
+              <p>{{ item.text }}</p>
+              <img
+                class="feed-images"
+                v-if="item.image"
+                :src="`http://localhost:5000/api/uploads/${item.image}`"
+                alt="hello"
+                width="500"
+              />
+              <div class="feed-status">
+                <div class="feed-likes">
+                  <i class="fa-solid fa-thumbs-up"></i>
+                  {{ item.likes.length > 0 ? item.likes[0].length : 0 }}
+                </div>
 
-                <button @click="handleCommentClick(item._id)">
-                  <i class="fa-regular fa-message"></i> Comment
-                </button>
+                <div class="feed-comments">
+                  <i class="fa-regular fa-message"></i>
+                  {{ item.comments.length > 0 ? item.comments[0].length : 0 }}
+                </div>
               </div>
-            </div>
-            <div class="comments-container">
-              <div class="comments" v-for="(comment, index) in item.comments[0]" :key="index">
-                <div class="comment">
-                  <div class="sectionComment">
-                    <img
-                      class="sectionComImg"
-                      v-if="comment.img"
-                      :src="`http://localhost:5000/api/uploads/${comment.img}`"
-                    />
-                    <h5 class="sectionComHfive">{{ comment.name }}</h5>
-                  </div>
-                  <div class="comment-user-info">
-                    <p>{{ comment.comment }}</p>
-                    <div
-                      v-if="
-                          isMyComment(
-                            comment.userid,
-                            getLoggedUser.id
-                          ) == true
+              <div class="border">
+                <div class="feed-buttons">
+                  <button
+                    type="button"
+                    v-if="isLiked(item, getLoggedUser.id) === false"
+                    @click="!handleLikePost(item.id, getLoggedUser.id)"
+                  >
+                    <i class="fa-regular fa-thumbs-up"></i> Like
+                  </button>
+                  <button
+                    v-else
+                    type="button "
+                    @click="handleDisLikePost(item.id, getLoggedUser.id)"
+                    class="feed-likes"
+                  >
+                    <i class="fa-solid fa-thumbs-up"></i> Liked
+                  </button>
+
+                  <button @click="handleCommentClick(item._id)">
+                    <i class="fa-regular fa-message"></i> Comment
+                  </button>
+                </div>
+              </div>
+              <div class="comments-container">
+                <div
+                  class="comments"
+                  v-for="(comment, index) in item.comments[0]"
+                  :key="index"
+                >
+                  <div class="comment">
+                    <div class="sectionComment">
+                      <img
+                        class="sectionComImg"
+                        v-if="comment.img"
+                        :src="`http://localhost:5000/api/uploads/${comment.img}`"
+                      />
+                      <h5 class="sectionComHfive">{{ comment.name }}</h5>
+                    </div>
+                    <div class="comment-user-info">
+                      <p>{{ comment.comment }}</p>
+                      <div
+                        v-if="
+                          isMyComment(comment.userid, getLoggedUser.id) == true
                         "
-                      class="comment-controlls"
-                    >
-                      <a to="#" @click="handleOnEdit(item.id, comment.id)">Edit</a>
-                      <a @click="handleDeleteComment(comment.id, comment.userid)" to="#">Delete</a>
+                        class="comment-controlls"
+                      >
+                        <a to="#" @click="handleOnEdit(item.id, comment.id)"
+                          >Edit</a
+                        >
+                        <a
+                          @click="
+                            handleDeleteComment(comment.id, comment.userid)
+                          "
+                          to="#"
+                          >Delete</a
+                        >
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <div class="comment-filed">
-                <input type="text" v-model="comment" placeholder="Write your comment" />
-                <button @click="handleAddComment(item.id)">
-                  <i class="fa-regular fa-paper-plane"></i>
-                </button>
+                <div class="comment-filed">
+                  <input
+                    type="text"
+                    v-model="comment"
+                    placeholder="Write your comment"
+                  />
+                  <button @click="handleAddComment(item.id)">
+                    <i class="fa-regular fa-paper-plane"></i>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="space"></div>
-  <Footer />
-</body>
+    <div class="space"></div>
+    <Footer />
+  </body>
 </template>
 <script>
 import { mapGetters, mapActions, mapState } from "vuex";
