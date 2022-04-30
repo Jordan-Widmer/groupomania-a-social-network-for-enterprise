@@ -1,10 +1,7 @@
 const express = require("express");
-const Feed = require("../models/Feed");
-const Joi = require("@hapi/joi");
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
-var mongoose = require("mongoose");
 const FeedsController = require("../controllers/Feeds.controller");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {

@@ -1,56 +1,36 @@
 <template>
-  <body>
-    <div class="wrapper">
-      <form action="#" @submit.prevent="handleUpdateProfile">
-        <div class="alert" v-if="profileUpdate">{{ profileUpdateMessage }}</div>
-        <h2>Mon profil</h2>
-        <img
-          :src="url"
-          v-if="url"
-          width="100"
-          height="100"
-          class="image-profile"
-          alt
-        />
-        <br />
-        <div class="upload-btn-wrapper">
-          <button class="btn">Upload a file</button>
-          <input type="file" accept="image/*" @change="selectFile($event)" />
-        </div>
-        <div class="input-box">
-          <input
-            type="text"
-            placeholder="Change name"
-            ref="userName"
-            v-model="user.name"
-          />
-          <p class="error" v-if="error.name">{{ error.name }}</p>
-        </div>
-        <div class="input-box">
-          <input type="email" placeholder="Change email" v-model="user.email" />
-          <p class="error" v-if="error.email">{{ error.email }}</p>
-        </div>
-        <div class="input-box">
-          <input
-            type="password"
-            placeholder="Change password"
-            v-model="user.password"
-          />
-          <p class="error" v-if="error.password">{{ error.password }}</p>
-        </div>
-        <div class="input-box button">
-          <input type="Submit" value="Mettre à jour" />
-        </div>
-        <div class="input-box button">
-          <input
-            type="button"
-            @click="handleDeleteProfile"
-            value="Supprimer profil"
-          />
-        </div>
-      </form>
-    </div>
-  </body>
+<body>
+  <div class="wrapper">
+    <form action="#" @submit.prevent="handleUpdateProfile">
+      <div class="alert" v-if="profileUpdate">{{ profileUpdateMessage }}</div>
+      <h2>Mon profil</h2>
+      <img :src="url" v-if="url" width="100" height="100" class="image-profile" alt />
+      <br />
+      <div class="upload-btn-wrapper">
+        <button class="btn">Upload a file</button>
+        <input type="file" accept="image/*" @change="selectFile($event)" />
+      </div>
+      <div class="input-box">
+        <input type="text" placeholder="Change name" ref="userName" v-model="user.name" />
+        <p class="error" v-if="error.name">{{ error.name }}</p>
+      </div>
+      <div class="input-box">
+        <input type="email" placeholder="Change email" v-model="user.email" />
+        <p class="error" v-if="error.email">{{ error.email }}</p>
+      </div>
+      <div class="input-box">
+        <input type="password" placeholder="Change password" v-model="user.password" />
+        <p class="error" v-if="error.password">{{ error.password }}</p>
+      </div>
+      <div class="input-box button">
+        <input type="Submit" value="Mettre à jour" />
+      </div>
+      <div class="input-box button">
+        <input type="button" @click="handleDeleteProfile" value="Supprimer profil" />
+      </div>
+    </form>
+  </div>
+</body>
 </template>
 
 <script>
@@ -80,7 +60,7 @@ export default {
       if (this.validateForm()) {
         this.UpdateProfile({
           ...this.user,
-          id: this.getLoggedUser._id,
+          id: this.getLoggedUser.id,
           file: this.file,
         });
       }
@@ -104,7 +84,7 @@ export default {
       return true;
     },
     handleDeleteProfile() {
-      this.DeleteProfile(this.getLoggedUser._id);
+      this.DeleteProfile(this.getLoggedUser.id);
     },
     selectFile(e) {
       console.log(e.target.files[0]);
@@ -117,6 +97,8 @@ export default {
     ...mapGetters(["getLoggedUser"]),
   },
   mounted() {
+    console.log("mounting hook");
+    console.log(this.getLoggedUser);
     this.user.name = this.getLoggedUser.name;
     this.user.email = this.getLoggedUser.email;
     this.user.password = this.getLoggedUser.password;

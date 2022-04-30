@@ -1,10 +1,18 @@
 const express = require("express");
 const Joi = require("@hapi/joi");
-const bcrypt = require("bcryptjs");
-const config = require("config");
-const User = require("../../models/User");
+const mysql = require("mysql");
 
 const router = express.Router();
+
+const pool = mysql.createPool({
+  connectionLimit: 100,
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "Groupomania",
+  port: 3307,
+});
+const tablename = "Users";
 
 /**
  * @route POST / api/auth
@@ -21,18 +29,30 @@ router.post("/", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Finding user in Database
-    let user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(400).json({ msg: "Invalid Credentials" });
-    }
-    if (user.password !== password) {
-      return res.status(400).json({ msg: "Invalid Credentials" });
-    }
-
-    res.send(user);
+    pool.getConnection((err, connection) => {
+      if (err) throw err;
+      const query = `SELECT * FROM ${tablename} WHERE email = '${email}'`;
+      connection.query(query, (err, rows) => {
+        connection.release();
+        if (err) {
+          console.log(err);
+          return;
+        }
+        if (rows.length > 0) {
+          if (rows[0].password == password) {
+            res.send(rows[0]);
+          } else {
+            res.status(401).json({ msg: "Invalid Credentials" });
+          }
+        } else {
+          res.status(401).json({
+            msg: "Invalid Credentials",
+          });
+        }
+      });
+    });
   } catch (err) {
+    console.log(err.message);
     res.status(500).send("Server Error");
   }
 });

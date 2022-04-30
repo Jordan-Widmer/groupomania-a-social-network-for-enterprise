@@ -92,6 +92,7 @@ export default createStore({
           },
         })
         .then((res) => {
+          console.log(res)
           commit("GETALLFEEDS", res.data);
         });
     },
@@ -103,9 +104,11 @@ export default createStore({
           },
         })
         .then((response) => {
+          undefined
+          console.log(response.data)
           commit("SAVEUSER", response.data);
           commit("LOGGEDIN", true);
-          router.push("/acceuil").catch((e) => {
+          router.push("/login").catch((e) => {
             console.log(e);
           });
         })
@@ -115,6 +118,7 @@ export default createStore({
         });
     },
     UpdateProfile({ commit }, payload) {
+      console.log(payload)
       const formData = new FormData();
       if (payload.file) {
         formData.append("file", payload.file);
@@ -160,7 +164,7 @@ export default createStore({
             console.log(e);
           });
         })
-        .catch((error) => {});
+        .catch((error) => { });
     },
 
     Login({ commit }, payload) {
@@ -173,9 +177,16 @@ export default createStore({
         .then((response) => {
           commit("SAVEUSER", response.data);
           commit("LOGGEDIN", true);
-          router.push("/acceuil").catch((e) => {
-            console.log(e);
-          });
+          if (response.data.isAdmin == 1) {
+            router.push("/dashboard").catch((e) => {
+              console.log(e);
+            });
+          }
+          else if (response.data.isAdmin == 0) {
+            router.push("/acceuil").catch((e) => {
+              console.log(e);
+            });
+          }
         })
         .catch((error) => {
           commit("LOGGINGERROR", true);
@@ -188,7 +199,7 @@ export default createStore({
         });
     },
 
-    EditFeed({ commit }, payload) {
+    EditFeed({ commit, dispatch }, payload) {
       const formData = new FormData();
       if (payload.file) {
         formData.append("file", payload.file);
@@ -204,12 +215,14 @@ export default createStore({
           },
         })
         .then((response) => {
-          commit("UPDATEFEED", response.data);
-          console.log(response.data);
+          dispatch('getAllFeeds');
+
+          // commit("UPDATEFEED", response.data);
+          // console.log(response.data);
         })
-        .catch((error) => {});
+        .catch((error) => { });
     },
-    CreateFeed({ commit }, payload) {
+    CreateFeed({ commit, dispatch }, payload) {
       const formData = new FormData();
       formData.append("file", payload.file);
       formData.append("text", payload.text);
@@ -223,10 +236,11 @@ export default createStore({
         })
         .then((response) => {
           commit("AddNewFeed", response.data);
+          dispatch('getAllFeeds');
         })
-        .catch((error) => {});
+        .catch((error) => { });
     },
-    deleteFeed({ commit }, payload) {
+    deleteFeed({ commit, dispatch }, payload) {
       axios
         .delete(`http://localhost:5000/api/feed/${payload.id}`, payload, {
           headers: {
@@ -235,11 +249,11 @@ export default createStore({
         })
         .then((res) => {
           console.log(res);
-          commit("DELETEFEED", res.data);
+          dispatch('getAllFeeds');
         });
     },
 
-    likeFeed({ commit }, payload) {
+    likeFeed({ commit, dispatch }, payload) {
       axios
         .put(`http://localhost:5000/api/feed/like/${payload.id}`, payload, {
           headers: {
@@ -248,10 +262,12 @@ export default createStore({
         })
         .then((res) => {
           console.log(res);
-          commit("UPDATEFEEDLike", res.data);
+          dispatch('getAllFeeds');
+
+          // commit("UPDATEFEEDLike", res.data);
         });
     },
-    dislikedFeed({ commit }, payload) {
+    dislikedFeed({ commit, dispatch }, payload) {
       axios
         .put(`http://localhost:5000/api/feed/dislike/${payload.id}`, payload, {
           headers: {
@@ -260,7 +276,8 @@ export default createStore({
         })
         .then((res) => {
           console.log(res);
-          commit("UPDATEFEEDLike", res.data);
+          dispatch('getAllFeeds');
+          // commit("UPDATEFEEDLike", res.data);
         });
     },
 
@@ -271,7 +288,7 @@ export default createStore({
         console.log(e);
       });
     },
-    addComment({ commit }, payload) {
+    addComment({ commit, dispatch }, payload) {
       axios
         .post(`http://localhost:5000/api/feed/comment/${payload.id}`, payload, {
           headers: {
@@ -280,10 +297,11 @@ export default createStore({
         })
         .then((res) => {
           console.log(res);
+          dispatch('getAllFeeds');
           commit("UPDATEFEEDCOMMENT", res.data);
         });
     },
-    EditComment({ commit }, payload) {
+    EditComment({ commit, dispatch }, payload) {
       axios
         .put(`http://localhost:5000/api/feed/comment/${payload.id}`, payload, {
           headers: {
@@ -291,12 +309,12 @@ export default createStore({
           },
         })
         .then((res) => {
-          console.log(res);
-          commit("UPDATEFEEDCOMMENT", res.data);
+          // commit("UPDATEFEEDCOMMENT", res.data);
+          dispatch('getAllFeeds');
         });
     },
 
-    deleteComment({ commit }, payload) {
+    deleteComment({ commit, dispatch }, payload) {
       axios
         .put(
           `http://localhost:5000/api/feed/comment/d/${payload.id}`,
@@ -309,6 +327,7 @@ export default createStore({
         )
         .then((res) => {
           console.log(res);
+          dispatch('getAllFeeds');
           commit("UPDATEFEEDCOMMENT", res.data);
         });
     },

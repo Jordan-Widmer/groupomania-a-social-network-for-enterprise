@@ -1,13 +1,12 @@
 const express = require("express");
-const Joi = require("@hapi/joi");
-const bcrypt = require("bcryptjs");
 const router = express.Router();
-const User = require("../models/User");
 const path = require("path");
 
 const multer = require("multer");
 const fs = require("fs");
 const UserController = require("../controllers/User.controller");
+
+
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -27,5 +26,8 @@ const upload = multer({
 router.post("/", UserController.registerUser);
 router.put("/:id", upload.single("file"), UserController.updateUser);
 router.delete("/:id", UserController.deleteUser);
+router.get("/activeuserstats", UserController.getMostActiveUsers);
+router.get("/mostrecentPosts", UserController.getMostRecentPosts);
+router.get("/registeredusers", UserController.getRegisteredUsers);
 
 module.exports = router;

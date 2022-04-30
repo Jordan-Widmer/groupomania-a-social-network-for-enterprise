@@ -1,11 +1,22 @@
 const express = require("express");
-const Feed = require("../models/Feed");
 const Joi = require("@hapi/joi");
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
-var mongoose = require("mongoose");
-const { findOneAndUpdate } = require("../models/Feed");
+const mysql = require("mysql");
+
+const pool = mysql.createPool({
+  connectionLimit: 100,
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "Groupomania",
+  port: 3307
+});
+const tablename = "Posts";
+
+// var mongoose = require("mongoose");
+// const { findOneAndUpdate } = require("../models/Feed");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const uploadPath = path.resolve();
@@ -23,63 +34,136 @@ const upload = multer({
 
 module.exports = {
   getAllFeeds: async (req, res) => {
-    const feed = await Feed.find()
-      .populate("addedBy")
-      .populate("comments.commentBy")
-      .sort({ addedAt: -1 });
-    res.send(feed);
+    let feeds = [];
+    pool.getConnection((err, connection) => {
+      if (err) throw err;
+      const query = `SELECT post.id, post.image , post.text, post.addedAt , user.name, user.email,
+       user.img as img, user.id as addedBy FROM Posts as post
+      JOIN Users as user
+      on user.id = post.addedBy
+      Order By post.addedAt Desc
+      `;
+      connection.query(query, (err, rows) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        let promises = [];
+        let promises1 = [];
+        for (var i = 0; i < rows.length; i++) {
+          promises.push(getcomments(rows[i].id));
+          promises1.push(getLikes(rows[i].id));
+        }
+        Promise.all(promises)
+          .then((comments) => {
+            Promise.all(promises1).then((likes) => {
+              connection.release();
+              rows.map((feed) => {
+                feeds.push({
+                  ...feed,
+                  likes: likes.filter(
+                    (f) => f.length > 0 && f[0].post_id == feed.id
+                  ),
+                  comments: comments.filter(
+                    (f) => f.length > 0 && f[0].postid == feed.id
+                  ),
+                });
+              });
+              res.send(feeds);
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      });
+    });
   },
+
   likeFeed: async (req, res) => {
     const { likedBy } = req.body;
-    Feed.findOneAndUpdate(
-      { _id: req.params.id },
-      { $push: { likedBy: [likedBy] } },
-      async function (err, response) {
-        const feed = await Feed.findById(req.params.id)
-          .populate("addedBy")
-          .populate("comments.commentBy");
-        res.send(feed);
-      }
-    );
+    let query = `INSERT INTO Likes ( user_id, post_id) VALUES (${+likedBy}, ${+req
+      .params.id});`;
+    try {
+      pool.getConnection((err, connection) => {
+        if (err) throw err;
+        connection.query(query, (err, rows) => {
+          connection.release();
+          if (err) {
+            console.log(err);
+            return;
+          }
+          res.status(201).send(rows);
+        });
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Server Error");
+    }
   },
   dislikeFeed: async (req, res) => {
     const { dislikedBy } = req.body;
-    Feed.findOneAndUpdate(
-      { _id: req.params.id },
-      { $pull: { likedBy: dislikedBy } },
-      async function (err, response) {
-        const feed = await Feed.findById(req.params.id)
-          .populate("addedBy")
-          .populate("comments.commentBy");
-        res.send(feed);
-      }
-    );
+    let query = `DELETE FROM Likes where user_id = ${+dislikedBy} AND post_id = ${+req
+      .params.id};`;
+    try {
+      pool.getConnection((err, connection) => {
+        if (err) throw err;
+        connection.query(query, (err, rows) => {
+          connection.release();
+          if (err) {
+            console.log(err);
+            return;
+          }
+          res.status(201).send(rows);
+        });
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Server Error");
+    }
   },
   commentFeed: async (req, res) => {
-    Feed.findOneAndUpdate(
-      { _id: req.params.id },
-      { $push: { comments: [{ ...req.body }] } },
-      async function (err, response) {
-        const feed = await Feed.findById(req.params.id)
-          .populate("addedBy")
-          .populate("comments.commentBy");
-        res.send(feed);
-      }
-    );
+    const { Comment, commentBy } = req.body;
+    let query = `INSERT INTO Comments ( userid, postid, comment) VALUES (${+commentBy}, ${+req
+      .params.id} , "${Comment}");`;
+    try {
+      pool.getConnection((err, connection) => {
+        if (err) throw err;
+        connection.query(query, (err, rows) => {
+          connection.release();
+          if (err) {
+            console.log(err);
+            return;
+          }
+          res.status(201).send(rows);
+        });
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Server Error");
+    }
   },
   addFeed: async (req, res) => {
     const { text, addedBy } = req.body;
+    let query = "";
+    if (req.file) {
+      query = `INSERT INTO ${tablename} (text , addedBy, image) VALUES ("${text}", ${+addedBy} , "${
+        req.file.filename
+      }");`;
+    } else {
+      query = `INSERT INTO ${tablename} (text , addedBy) VALUES ("${text}", ${+addedBy});`;
+    }
     try {
-      feed = new Feed({
-        Text: text,
-        addedBy: addedBy,
-        image: req.file ? req.file.filename : "",
+      pool.getConnection((err, connection) => {
+        if (err) throw err;
+        connection.query(query, (err, rows) => {
+          connection.release();
+          if (err) {
+            console.log(err);
+            return;
+          }
+          res.status(201).send(rows);
+        });
       });
-      await feed.save();
-      const feedd = await Feed.findById(feed._id)
-        .populate("addedBy")
-        .populate("comments.commentBy");
-      res.send(feedd);
     } catch (error) {
       console.log(error);
       res.status(500).send("Server Error");
@@ -87,23 +171,24 @@ module.exports = {
   },
   editFeed: async (req, res) => {
     const { text } = req.body;
+    let query = "";
+    if (req.file) {
+      query = `Update ${tablename} Set text = "${text}" , image = "${req.file.filename}" where id = ${req.params.id};`;
+    } else {
+      query = `Update ${tablename} SET text = "${text}" where id = ${req.params.id};`;
+    }
     try {
-      const fed = {};
-      fed.Text = text;
-      if (req.file) {
-        fed.image = req.file.filename;
-      }
-      Feed.findByIdAndUpdate(
-        req.params.id,
-        { $set: fed },
-        { new: true },
-        async function (err, response) {
-          const feed = await Feed.findById(req.params.id)
-            .populate("addedBy")
-            .populate("comments.commentBy");
-          res.send(feed);
-        }
-      );
+      pool.getConnection((err, connection) => {
+        if (err) throw err;
+        connection.query(query, (err, rows) => {
+          connection.release();
+          if (err) {
+            console.log(err);
+            return;
+          }
+          res.status(201).send(rows);
+        });
+      });
     } catch (error) {
       console.log(error);
       res.status(500).send("Server Error");
@@ -111,37 +196,80 @@ module.exports = {
   },
 
   deleteCommentFeed: async (req, res) => {
-    const { commentid } = req.body;
-    Feed.findOneAndUpdate(
-      { _id: req.params.id },
-      { $pull: { comments: { _id: commentid } } },
-      async function (err, response) {
-        const feed = await Feed.findById(req.params.id)
-          .populate("addedBy")
-          .populate("comments.commentBy");
-        res.send(feed);
-      }
-    );
+    pool.getConnection((err, connection) => {
+      if (err) throw err;
+      const query = `DELETE from Comments where id = ${req.params.id}`;
+      connection.query(query, (err, rows) => {
+        connection.release();
+        if (err) {
+          console.log(err);
+          return;
+        }
+        res.send(rows);
+      });
+    });
   },
   editComment: async (req, res) => {
-    Feed.findOneAndUpdate(
-      { _id: req.params.id },
-      {
-        $set: { [`comments.$[outer].Comment`]: req.body.comment },
-      },
-      {
-        arrayFilters: [{ "outer._id": req.body.commentId }],
-      },
-      async function (err, response) {
-        const feed = await Feed.findById(req.params.id)
-          .populate("addedBy")
-          .populate("comments.commentBy");
-        res.send(feed);
-      }
-    );
+    pool.getConnection((err, connection) => {
+      const query = `UPDATE Comments Set comment = "${req.body.comment}" where id = ${req.params.id};`;
+      connection.query(query, (err, rows) => {
+        connection.release();
+        if (err) {
+          console.log(err);
+          return;
+        }
+        res.status(201).send(rows);
+      });
+    });
   },
   deleteFeed: async (req, res) => {
-    const feed = await Feed.findByIdAndRemove(req.params.id);
-    res.send(feed);
+    pool.getConnection((err, connection) => {
+      if (err) throw err;
+      const query = `DELETE from ${tablename} where id = ${req.params.id}`;
+      connection.query(query, (err, rows) => {
+        connection.release();
+        if (err) {
+          console.log(err);
+          return;
+        }
+        res.send(rows);
+      });
+    });
   },
 };
+function getcomments(postid) {
+  return new Promise((resolve, reject) => {
+    pool.getConnection((err, connection) => {
+      if (err) throw err;
+      const query = `SELECT c.comment , c.id , c.userid , c.postid , u.name , u.img FROM Comments as c 
+join Users as u 
+on c.userid = u.id
+where c.postid = ${postid}
+    `;
+      connection.query(query, (err, row) => {
+        if (err) {
+          console.log(err);
+          return reject("Falied to get comments");
+        }
+        return resolve(row);
+      });
+    });
+  });
+}
+
+function getLikes(postid) {
+  return new Promise((resolve, reject) => {
+    pool.getConnection((err, connection) => {
+      if (err) throw err;
+      const query = `SELECT * FROM Likes where post_id = ${postid}
+    `;
+      connection.query(query, (err, row) => {
+        if (err) {
+          console.log(err);
+          return reject("Falied to get likes");
+        }
+        return resolve(row);
+      });
+    });
+  });
+}

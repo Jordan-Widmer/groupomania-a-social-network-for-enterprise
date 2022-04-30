@@ -41,6 +41,15 @@ const routes = [
       requiredAuth: true,
     },
   },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Admin/Dashboard.vue"),
+    meta: {
+      requiredAuth: true,
+    },
+  },
 ];
 
 const router = createRouter({
