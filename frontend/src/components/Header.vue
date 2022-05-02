@@ -15,6 +15,9 @@
         <li v-if="getLoggedUser.isAdmin == 0">
           <router-link to="/acceuil" class="nav-link">Actualités</router-link>
         </li>
+        <li v-if="getLoggedUser.isAdmin == 1">
+          <router-link to="/dashboard" class="nav-link">Dashboard</router-link>
+        </li>
         <li>
           <router-link to="/profil" class="nav-link">Profil</router-link>
         </li>

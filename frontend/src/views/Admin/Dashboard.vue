@@ -5,7 +5,7 @@
       <h1>Dashboard</h1>
       <div class="row">
         <div class="col-8">
-          <h5>Most Active Users</h5>
+          <h5 style="color: lightgrey">Most Active Users</h5>
           <div class="card-contaienr">
             <div class="card" v-for="(user, index) in activeUsers" :key="index">
               <div class="card-header">
@@ -27,7 +27,7 @@
           </div>
         </div>
         <div class="col-4">
-          <h5>Recent Posts</h5>
+          <h5 style="color: lightgrey">Recent Posts</h5>
           <div class="recent-post-card-container">
             <ul class="recent-post-list">
               <li
@@ -53,7 +53,7 @@
 
       <div class="row">
         <div class="col-8">
-          <h5>Registered Users</h5>
+          <h5 style="color: lightgrey">Registered Users</h5>
           <table>
             <thead>
               <tr>
@@ -133,7 +133,7 @@ export default {
 .container {
   width: 100%;
   text-align: left;
-  background-color: #eee;
+  background-color: #111;
 }
 .row {
   display: flex;
@@ -147,13 +147,22 @@ export default {
 }
 .card-contaienr {
   display: flex;
+  margin-left: 20px;
 }
 .card {
   width: 30%;
+  cursor: pointer;
   min-height: 100px;
-  background: #fff;
   padding: 10px 15px;
   border-radius: 15px;
+  background: #1b1b1b;
+  font-family: "Poppins", sans-serif;
+  border: 1px solid lightgray;
+  color: lightgrey;
+  transition: all 0.3s ease;
+}
+.card:hover {
+  border: #ff9000 1px solid;
 }
 .card:not(:last-child) {
   margin-right: 10px;
@@ -174,12 +183,21 @@ export default {
   justify-content: space-between;
 }
 .card-date h5 {
+  font-size: 16px;
+  font-weight: 400;
   margin-top: 0px;
 }
 .recent-post-card-container {
   width: 90%;
-  background-color: #fff;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  background-color: #1b1b1b;
+  font-family: "Poppins", sans-serif;
+  border: 1px solid lightgrey;
   border-radius: 15px;
+}
+.recent-post-card-container:hover {
+  border: #ff9000 1px solid;
 }
 .recent-post-list {
   list-style: none;
@@ -191,15 +209,18 @@ export default {
 .recent-post-list-item img {
   width: 30px;
   height: 30px;
+  object-fit: cover;
   align-self: flex-start;
   margin-top: 20px;
   margin-right: 10px;
 }
 .post-info h3 {
+  color: lightgrey;
   margin: 0px 0px;
   margin-top: 20px;
 }
 .post-info p {
+  color: #ff9000;
   margin: 2px 0px;
 }
 .post-title {
@@ -210,18 +231,48 @@ export default {
   width: 200px;
 }
 
+h1 {
+  margin-top: 0;
+  margin-left: 30px;
+  margin-bottom: 0;
+  padding-top: 60px;
+  font-size: 36px;
+  font-weight: 500;
+  color: lightgrey;
+  font-family: "Poppins", sans-serif;
+}
+h3 {
+  font-weight: 400;
+  color: #ff9000;
+}
+h4 {
+  font-weight: 400;
+  font-size: 18.5px;
+}
+h5 {
+  margin-left: 30px;
+  margin-top: 30px;
+  margin-bottom: 16px;
+  font-size: 24px;
+  font-weight: 400;
+  color: #ff9000;
+  font-family: "Poppins", sans-serif;
+}
 table {
   border: 1px solid #ccc;
   border-collapse: collapse;
   margin: 0;
+  margin-bottom: 90px;
+  margin-left: 20px;
   padding: 0;
-  width: 100% !important;
+  width: 96% !important;
   table-layout: fixed;
 }
 
 table tr {
-  background-color: #f8f8f8;
-  border: 1px solid #ddd;
+  background-color: #1b1b1b;
+  color: lightgray;
+  border: 1px solid lightgrey;
   padding: 0.35em;
   height: 50px;
 }
@@ -230,6 +281,7 @@ table th,
 table td {
   padding: 0.625em;
   text-align: center;
+  font-family: "Poppins";
 }
 
 table th {
@@ -272,11 +324,17 @@ table th {
   }
 }
 .delete-user {
-  background-color: red;
-  color: white;
+  transition: all 0.3s ease;
+  background: linear-gradient(-135deg, #ff9000, #c46f00);
+  color: #111;
+  font-family: "Poppins", sans-serif;
   outline: none;
   border: none;
   padding: 5px 10px;
   border-radius: 4px;
+  cursor: pointer;
+}
+.delete-user:hover {
+  transform: scale(0.95);
 }
 </style>
