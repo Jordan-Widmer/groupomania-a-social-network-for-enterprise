@@ -21,6 +21,8 @@ const upload = multer({
 const router = express.Router();
 
 router.get("/", FeedsController.getAllFeeds);
+router.get("/:id/comments", FeedsController.getComments);
+router.get("/:id/likes", FeedsController.getLikes);
 router.put("/like/:id", FeedsController.likeFeed);
 router.put("/dislike/:id", FeedsController.dislikeFeed);
 router.post("/comment/:id", FeedsController.commentFeed);

@@ -91,7 +91,14 @@ module.exports = {
             console.log(err);
             return;
           }
-          res.status(201).send(rows);
+          let sql = `select * from Users where id = ${req.params.id}`;
+          connection.query(sql, (err, row) => {
+            if (err) {
+              console.log(err);
+              return;
+            }
+            res.status(201).send(row[0]);
+          });
         });
       });
     } catch (error) {
@@ -122,11 +129,11 @@ module.exports = {
     try {
       pool.getConnection((err, connection) => {
         if (err) throw err;
-        const query = `SELECT u.id, u.name , u.img, count(p.id) as "totalPosts" , DATE_FORMAT(p.addedAt,'%d %M %Y') as "lastpost" FROM Users as u
+        const query = `SELECT u.id, u.name , u.img, count(p.id) as "totalPosts" , DATE_FORMAT(MAX(p.addedAt),'%d %M %Y') as "lastpost" FROM Users as u
         JOIN Posts as p
         on u.id = p.addedBy
         GROUP By(u.id)
-        ORDER BY  totalPosts  Desc 
+        ORDER BY  totalPosts  Desc
         LIMIT 3;`;
         connection.query(query, (err, rows) => {
           connection.release();
@@ -169,7 +176,7 @@ module.exports = {
     try {
       pool.getConnection((err, connection) => {
         if (err) throw err;
-        const query = `SELECT u.id, u.name , u.email, u.img, count(p.id) as "totalPosts" , DATE_FORMAT(p.addedAt,'%d %M %Y') as "lastpost" , p.text as "posttitle" FROM Users as u
+        const query = `SELECT u.id, u.name , u.email, u.img, count(p.id) as "totalPosts" , DATE_FORMAT(MAX(p.addedAt),'%d %M %Y') as "lastpost" , p.text as "posttitle" FROM Users as u
         Left JOIN Posts as p
         on u.id = p.addedBy
         WHERE u.isAdmin = 0

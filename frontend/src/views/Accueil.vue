@@ -62,7 +62,7 @@
               <p>{{ item.text }}</p>
               <img
                 class="feed-images"
-                v-if="item.image"
+                v-if="returnImage(item.image)"
                 :src="`http://localhost:5000/api/uploads/${item.image}`"
                 alt="hello"
                 width="500"
@@ -70,12 +70,12 @@
               <div class="feed-status">
                 <div class="feed-likes">
                   <i class="fa-solid fa-thumbs-up"></i>
-                  {{ item.likes.length > 0 ? item.likes[0].length : 0 }}
+                  {{ item.likes.length > 0 ? item.likes.length : 0 }}
                 </div>
 
                 <div class="feed-comments">
                   <i class="fa-regular fa-message"></i>
-                  {{ item.comments.length > 0 ? item.comments[0].length : 0 }}
+                  {{ item.comments.length > 0 ? item.comments.length : 0 }}
                 </div>
               </div>
               <div class="border">
@@ -96,15 +96,18 @@
                     <i class="fa-solid fa-thumbs-up"></i> Liked
                   </button>
 
-                  <button @click="handleCommentClick(item._id)">
+                  <button @click="handleCommentClick(item.id)">
                     <i class="fa-regular fa-message"></i> Comment
                   </button>
                 </div>
               </div>
-              <div class="comments-container">
+              <div
+                class="comments-container"
+                v-if="showCommentForm == true && item.id == commentOf"
+              >
                 <div
                   class="comments"
-                  v-for="(comment, index) in item.comments[0]"
+                  v-for="(comment, index) in item.comments"
                   :key="index"
                 >
                   <div class="comment">
@@ -214,11 +217,17 @@ export default {
       }
       return false;
     },
+    returnImage(image) {
+      if (image === '""') {
+        return false;
+      }
+      return true;
+    },
     isLiked(post, userid) {
       for (var i = 0; i < post.likes.length; i++) {
         if (post.likes.length > 0) {
-          console.log(post.likes[0][i].user_id);
-          if (post.likes[0][i].user_id == userid) {
+          console.log(post.likes[i].user_id);
+          if (post.likes[i].user_id == userid) {
             return true;
             break;
           }
@@ -292,13 +301,11 @@ export default {
       this.currentEditComment.commentId = commentId;
 
       const currentpost = this.feeds.filter((f) => f.id == postId);
-      currentpost[0].comments[0].map((f) => {
+      currentpost[0].comments.map((f) => {
         console.log(f);
       });
 
-      const comments = currentpost[0].comments[0].filter(
-        (c) => c.id == commentId
-      );
+      const comments = currentpost[0].comments.filter((c) => c.id == commentId);
       console.log(comments);
       this.comment = comments[0].comment;
     },
@@ -339,7 +346,7 @@ export default {
       this.currentFeed = this.feeds.filter((f) => f.id == feedId)[0];
       this.editFeed = true;
       this.text = this.currentFeed.text;
-      if (this.currentFeed.image) {
+      if (this.currentFeed.image !== '""') {
         this.url =
           "http://localhost:5000/api/uploads/" + this.currentFeed.image;
       }

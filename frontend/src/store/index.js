@@ -85,15 +85,44 @@ export default createStore({
   },
   actions: {
     getAllFeeds({ commit }) {
+      const posts = [];
       axios
         .get("http://localhost:5000/api/feed", {
           headers: {
             "Content-Type": "Application/json",
           },
         })
-        .then((res) => {
+        .then(async (res) => {
           console.log(res);
-          commit("GETALLFEEDS", res.data);
+          for (let i = 0; i < res.data.length; i++) {
+            // console.log(res.data[i].id)
+            // console.log(res.data[i])
+            const comments = await axios.get(
+              `http://localhost:5000/api/feed/${res.data[i].id}/comments`,
+              {
+                headers: {
+                  "Content-Type": "Application/json",
+                },
+              }
+            );
+
+            const likes = await axios.get(
+              `http://localhost:5000/api/feed/${res.data[i].id}/likes`,
+              {
+                headers: {
+                  "Content-Type": "Application/json",
+                },
+              }
+            );
+
+            posts.push({
+              likes: likes.data,
+              comments: comments.data,
+              ...res.data[i],
+            });
+          }
+          console.log(posts);
+          commit("GETALLFEEDS", posts);
         });
     },
     signUp({ commit }, payload) {

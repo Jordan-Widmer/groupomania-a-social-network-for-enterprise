@@ -4,6 +4,10 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 const mysql = require("mysql");
+var async = require("async");
+
+let i = 0;
+let j = 0;
 
 const pool = mysql.createPool({
   connectionLimit: 100,
@@ -15,8 +19,6 @@ const pool = mysql.createPool({
 });
 const tablename = "Posts";
 
-// var mongoose = require("mongoose");
-// const { findOneAndUpdate } = require("../models/Feed");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const uploadPath = path.resolve();
@@ -37,45 +39,24 @@ module.exports = {
     let feeds = [];
     pool.getConnection((err, connection) => {
       if (err) throw err;
-      const query = `SELECT post.id, post.image , post.text, post.addedAt , user.name, user.email,
-       user.img as img, user.id as addedBy FROM Posts as post
-      JOIN Users as user
-      on user.id = post.addedBy
-      Order By post.addedAt Desc
-      `;
-      connection.query(query, (err, rows) => {
-        if (err) {
-          console.log(err);
-          return;
-        }
-        let promises = [];
-        let promises1 = [];
-        for (var i = 0; i < rows.length; i++) {
-          promises.push(getcomments(rows[i].id));
-          promises1.push(getLikes(rows[i].id));
-        }
-        Promise.all(promises)
-          .then((comments) => {
-            Promise.all(promises1).then((likes) => {
-              connection.release();
-              rows.map((feed) => {
-                feeds.push({
-                  ...feed,
-                  likes: likes.filter(
-                    (f) => f.length > 0 && f[0].post_id == feed.id
-                  ),
-                  comments: comments.filter(
-                    (f) => f.length > 0 && f[0].postid == feed.id
-                  ),
-                });
-              });
-              res.send(feeds);
-            });
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      });
+      try {
+        const query = `SELECT post.id, post.image , post.text, post.addedAt , user.name, user.email,
+         user.img as img, user.id as addedBy FROM Posts as post
+        JOIN Users as user
+        on user.id = post.addedBy
+        Order By post.addedAt Desc
+        `;
+        connection.query(query, async (err, rows) => {
+          if (err) {
+            console.log(err);
+            return;
+          }
+
+          res.send(rows);
+        });
+      } catch (error) {
+        res.send("err");
+      }
     });
   },
 
@@ -236,40 +217,77 @@ module.exports = {
       });
     });
   },
-};
-function getcomments(postid) {
-  return new Promise((resolve, reject) => {
+
+  getComments: async (req, res) => {
     pool.getConnection((err, connection) => {
       if (err) throw err;
       const query = `SELECT c.comment , c.id , c.userid , c.postid , u.name , u.img FROM Comments as c 
-join Users as u 
-on c.userid = u.id
-where c.postid = ${postid}
-    `;
-      connection.query(query, (err, row) => {
+      join Users as u 
+      on c.userid = u.id
+      where c.postid = ${req.params.id}`;
+      connection.query(query, (err, rows) => {
+        connection.release();
         if (err) {
           console.log(err);
-          return reject("Falied to get comments");
+          return;
         }
-        return resolve(row);
+        res.send(rows);
       });
     });
-  });
-}
+  },
 
-function getLikes(postid) {
-  return new Promise((resolve, reject) => {
+  getLikes: async (req, res) => {
     pool.getConnection((err, connection) => {
       if (err) throw err;
-      const query = `SELECT * FROM Likes where post_id = ${postid}
-    `;
-      connection.query(query, (err, row) => {
+      const query = `SELECT * FROM Likes where post_id = ${req.params.id}`;
+      connection.query(query, (err, rows) => {
+        connection.release();
         if (err) {
           console.log(err);
-          return reject("Falied to get likes");
+          return;
         }
-        return resolve(row);
+        res.send(rows);
       });
     });
-  });
-}
+  },
+};
+// function getcomments(postid) {
+//   j++
+//   console.log("get calleed. comments" + j)
+//   return new Promise((resolve, reject) => {
+//     pool.getConnection((err, connection) => {
+//       if (err) throw err;
+//       const query = `SELECT c.comment , c.id , c.userid , c.postid , u.name , u.img FROM Comments as c
+// join Users as u
+// on c.userid = u.id
+// where c.postid = ${postid}
+//     `;
+//       connection.query(query, (err, row) => {
+//         if (err) {
+//           console.log(err)
+//           return reject("Falied to get comments")
+//         }
+//         return resolve(row)
+//       })
+//     })
+//   });
+// }
+
+// function getLikes(postid) {
+//   i++
+//   console.log("get calleed. likes" + i)
+//   return new Promise((resolve, reject) => {
+//     pool.getConnection((err, connection) => {
+//       if (err) throw err;
+//       const query = `SELECT * FROM Likes where post_id = ${postid}
+//     `;
+//       connection.query(query, (err, row) => {
+//         if (err) {
+//           console.log(err)
+//           return reject("Falied to get likes")
+//         }
+//         return resolve(row)
+//       })
+//     })
+//   });
+// }
