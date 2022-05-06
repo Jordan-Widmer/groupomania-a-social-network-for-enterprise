@@ -456,8 +456,9 @@ body {
   padding: 0px;
   text-transform: capitalize;
   margin: 0px;
+  margin-bottom: 2px;
   color: lightgrey;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   font-family: "Poppins";
 }
@@ -500,6 +501,7 @@ body {
   color: lightgrey;
   font-family: "Poppins";
   margin-bottom: 8px;
+  margin-top: 24px;
   /* text-align: center; */
   word-wrap: break-word;
 }
@@ -533,7 +535,7 @@ body {
 .feed-likes {
   color: lightgrey;
   text-align: left;
-  margin: 10px 0px;
+  /* margin: 10px 0px; */
 }
 .comments-container {
   border-radius: 13px;
@@ -625,6 +627,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  margin-top: 24px;
 }
 .feed-comments {
   margin-left: 10px;
