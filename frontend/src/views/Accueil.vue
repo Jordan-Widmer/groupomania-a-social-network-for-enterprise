@@ -620,6 +620,7 @@ body {
 .comment-user-info p {
   padding: 0;
   margin: 0;
+  margin-bottom: 10px;
   word-wrap: break-word;
   text-align: center;
 }
