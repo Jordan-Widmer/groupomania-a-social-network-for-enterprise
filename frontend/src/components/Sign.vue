@@ -9,6 +9,7 @@
             type="text"
             v-model="user.name"
             placeholder="Enter your name"
+            pattern="^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$"
           />
           <p class="error" v-if="error.name">{{ error.name }}</p>
         </div>
@@ -17,6 +18,7 @@
             type="email"
             placeholder="Enter your email"
             v-model="user.email"
+            pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$"
           />
           <p class="error" v-if="error.email">{{ error.email }}</p>
         </div>
@@ -25,6 +27,7 @@
             type="password"
             placeholder="Create password"
             v-model="user.password"
+            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
           />
           <p class="error" v-if="error.password">{{ error.password }}</p>
         </div>
@@ -95,8 +98,8 @@ export default {
         this.error.password = "Please enter your Password";
         return false;
       }
-      if (this.user.password.length < 5) {
-        this.error.password = "password should be more than 5 characters";
+      if (this.user.password.length < 8) {
+        this.error.password = "password should be more than 8 characters";
         return false;
       }
       if (this.user.conformPassword == "") {

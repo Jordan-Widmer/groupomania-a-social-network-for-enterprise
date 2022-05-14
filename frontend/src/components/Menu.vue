@@ -23,11 +23,17 @@
             placeholder="Change name"
             ref="userName"
             v-model="user.name"
+            pattern="^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$"
           />
           <p class="error" v-if="error.name">{{ error.name }}</p>
         </div>
         <div class="input-box">
-          <input type="email" placeholder="Change email" v-model="user.email" />
+          <input
+            type="email"
+            placeholder="Change email"
+            v-model="user.email"
+            pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$"
+          />
           <p class="error" v-if="error.email">{{ error.email }}</p>
         </div>
         <div class="input-box">
@@ -35,6 +41,7 @@
             type="password"
             placeholder="Change password"
             v-model="user.password"
+            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
           />
           <p class="error" v-if="error.password">{{ error.password }}</p>
         </div>

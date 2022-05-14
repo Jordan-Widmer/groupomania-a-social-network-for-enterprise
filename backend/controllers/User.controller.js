@@ -46,7 +46,7 @@ module.exports = {
           }
           if (rows.length > 0) {
             res.status(400).json({
-              msg: "User Already Exists",
+              msg: "Email Already Exists",
             });
           } else {
             const query = `INSERT INTO ${tablename} (name , email , password) VALUES ("${name}", "${email}", "${password}");`;
