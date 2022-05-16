@@ -1,12 +1,27 @@
 import { createStore } from "vuex";
 import axios from "axios";
 import router from "../router";
+import { store } from ".";
 
-export default createStore({
+axios.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  function (error) {
+    if (401 === error.response.status) {
+      myStore.dispatch("LogOut");
+    } else {
+      return Promise.reject(error);
+    }
+  }
+);
+
+const myStore = createStore({
   state: {
     loggedIn: false,
     feeds: [],
     user: {},
+    jwt: "",
     LoginError: false,
     LoginErrorMessage: "",
     profileUpdate: false,
@@ -20,6 +35,10 @@ export default createStore({
     Feeds: (state) => state.feeds,
   },
   mutations: {
+    RESETUSER(state) {
+      state.user = {};
+      state.jwt = "";
+    },
     LOGGINGERROR(state, payload) {
       state.LoginError = payload;
     },
@@ -41,6 +60,9 @@ export default createStore({
     },
     SAVEUSER(state, payload) {
       state.user = payload;
+    },
+    SAVEJWT(state, payload) {
+      state.jwt = payload;
     },
     LOGGEDIN(state, payload) {
       state.loggedIn = payload;
@@ -133,7 +155,6 @@ export default createStore({
           },
         })
         .then((response) => {
-          undefined;
           console.log(response.data);
           commit("SAVEUSER", response.data);
           commit("LOGGEDIN", true);
@@ -204,13 +225,16 @@ export default createStore({
           },
         })
         .then((response) => {
-          commit("SAVEUSER", response.data);
+          commit("SAVEUSER", response.data?.user);
+          commit("SAVEJWT", response.data?.jwtToken);
+          axios.defaults.headers.common["Authorization"] =
+            response.data?.jwtToken;
           commit("LOGGEDIN", true);
-          if (response.data.isAdmin == 1) {
+          if (response.data?.user?.isAdmin == 1) {
             router.push("/dashboard").catch((e) => {
               console.log(e);
             });
-          } else if (response.data.isAdmin == 0) {
+          } else {
             router.push("/acceuil").catch((e) => {
               console.log(e);
             });
@@ -310,8 +334,9 @@ export default createStore({
     },
 
     LogOut({ commit }) {
-      commit("SAVEUSER", {});
+      commit("RESETUSER");
       commit("LOGGEDIN", false);
+      axios.defaults.headers.common["Authorization"] = "";
       router.push("/login").catch((e) => {
         console.log(e);
       });
@@ -362,3 +387,5 @@ export default createStore({
   },
   modules: {},
 });
+
+export default myStore;

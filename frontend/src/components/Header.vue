@@ -9,7 +9,7 @@
         <i class="fa-solid fa-bars"></i>
       </label>
       <ul class="navbar-list">
-        <li v-if="getLoggedUser.isAdmin == 0">
+        <li>
           <router-link class="active" to="/acceuil">Home</router-link>
         </li>
         <li v-if="getLoggedUser.isAdmin == 0">

@@ -48,7 +48,7 @@
               <div class="feed-meta-user-info">
                 <h5 v-if="item.addedBy">{{ item.name }}</h5>
                 <div
-                  v-if="isMyPost(item.addedBy, getLoggedUser.id) == true"
+                  v-if="isMyPost(item.addedBy, getLoggedUser.id) == true || getLoggedUser.isAdmin == 1"
                   class="comment-controlls"
                 >
                   <a to="#" @click="handleOnEditPost(item.id)">Edit</a>

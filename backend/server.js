@@ -3,6 +3,7 @@ const app = express();
 const morgan = require("morgan");
 app.use(morgan("dev"));
 const cors = require("cors");
+require("dotenv").config();
 
 app.use(express.json({ limit: "50mb", extended: false }));
 app.use(cors());

@@ -40,11 +40,6 @@
             </div>
           </div>
         </div>
-        <a
-          class="ukraine-help"
-          href="https://www.redcross.ch/fr/crise-en-ukraine-soutenez-l-aide-d-urgence"
-          >Aide humanitaire | Soutenir l'ukraine</a
-        >
       </div>
     </footer>
   </body>
@@ -68,7 +63,6 @@ export default {
 .row {
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 35px;
 }
 body {
   line-height: 1.5;

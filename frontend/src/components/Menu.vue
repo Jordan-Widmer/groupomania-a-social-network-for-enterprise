@@ -86,7 +86,9 @@ export default {
     handleUpdateProfile() {
       if (this.validateForm()) {
         this.UpdateProfile({
-          ...this.user,
+          name: this.user.name,
+          email: this.user.email,
+          password: this.user.password,
           id: this.getLoggedUser.id,
           file: this.file,
         });
@@ -98,14 +100,6 @@ export default {
       }
       if (this.user.email == "") {
         this.error.email = "Please enter your email";
-        return false;
-      }
-      if (this.user.password == "") {
-        this.error.password = "Please enter your Password";
-        return false;
-      }
-      if (this.user.password.length < 5) {
-        this.error.password = "password should be more than 5 characters";
         return false;
       }
       return true;

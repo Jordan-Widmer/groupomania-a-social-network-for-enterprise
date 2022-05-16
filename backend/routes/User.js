@@ -5,6 +5,7 @@ const path = require("path");
 const multer = require("multer");
 const fs = require("fs");
 const UserController = require("../controllers/User.controller");
+const AuthGuard = require("../middlewares/AuthGard");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -22,8 +23,12 @@ const upload = multer({
 });
 
 router.post("/", UserController.registerUser);
-router.put("/:id", upload.single("file"), UserController.updateUser);
-router.delete("/:id", UserController.deleteUser);
+router.put(
+  "/:id",
+  [upload.single("file"), AuthGuard],
+  UserController.updateUser
+);
+router.delete("/:id", AuthGuard, UserController.deleteUser);
 router.get("/activeuserstats", UserController.getMostActiveUsers);
 router.get("/mostrecentPosts", UserController.getMostRecentPosts);
 router.get("/registeredusers", UserController.getRegisteredUsers);

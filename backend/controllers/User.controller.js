@@ -5,6 +5,7 @@ const path = require("path");
 const multer = require("multer");
 const fs = require("fs");
 const mysql = require("mysql");
+const bcrypt = require("bcryptjs");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -49,14 +50,20 @@ module.exports = {
               msg: "Email Already Exists",
             });
           } else {
-            const query = `INSERT INTO ${tablename} (name , email , password) VALUES ("${name}", "${email}", "${password}");`;
-            connection.query(query, (err, rows) => {
-              connection.release();
+            bcrypt.hash(password, 10, function (err, hash) {
               if (err) {
-                console.log(err);
+                console.log("NO ACCOUNT CREATION");
                 return;
               }
-              res.status(201).send(rows);
+              const query = `INSERT INTO ${tablename} (name , email , password) VALUES ("${name}", "${email}", "${hash}");`;
+              connection.query(query, (err, rows) => {
+                connection.release();
+                if (err) {
+                  console.log(err);
+                  return;
+                }
+                res.status(201).send(rows);
+              });
             });
           }
         });
@@ -74,30 +81,40 @@ module.exports = {
     if (email) updateUser.email = email;
     if (password) updateUser.password = password;
     if (req.file) updateUser.imageAvatar = req.file.filename;
+
     try {
       pool.getConnection((err, connection) => {
         if (err) throw err;
         const { name, email, password } = req.body;
         let sql = "";
-        if (req.file) {
-          console.log("with file");
-          sql = `Update ${tablename} SET name = '${name}' , email = '${email}' , password = '${password}', img = '${req.file.filename}' where id = ${req.params.id}`;
-        } else {
-          console.log("with our file");
-          sql = `Update ${tablename} SET name = '${name}' , email = '${email}' , password = '${password}' where id = ${req.params.id}`;
-        }
-        connection.query(sql, (err, rows) => {
+        bcrypt.hash(password, 10, function (err, hash) {
           if (err) {
             console.log(err);
             return;
           }
-          let sql = `select * from Users where id = ${req.params.id}`;
-          connection.query(sql, (err, row) => {
+          const passwordStatement =
+            password === "undefined" ? `` : `, password = '${hash}'`;
+
+          if (req.file) {
+            console.log("with file");
+            sql = `Update ${tablename} SET name = '${name}' , email = '${email}' ${passwordStatement}, img = '${req.file.filename}' where id = ${req.params.id}`;
+          } else {
+            console.log("with our file");
+            sql = `Update ${tablename} SET name = '${name}' , email = '${email}' ${passwordStatement} where id = ${req.params.id}`;
+          }
+          connection.query(sql, (err, rows) => {
             if (err) {
               console.log(err);
               return;
             }
-            res.status(201).send(row[0]);
+            let sql = `select * from Users where id = ${req.params.id}`;
+            connection.query(sql, (err, row) => {
+              if (err) {
+                console.log(err);
+                return;
+              }
+              res.status(201).send(row[0]);
+            });
           });
         });
       });
