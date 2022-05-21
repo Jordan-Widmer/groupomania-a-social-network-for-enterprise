@@ -9,11 +9,11 @@ const router = express.Router();
 
 const pool = mysql.createPool({
   connectionLimit: 100,
-  host: "localhost",
-  user: "root",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
   password: "",
-  database: "Groupomania",
-  port: 3307,
+  database: process.env.DB_DATABASE,
+  port: process.env.DB_PORT,
 });
 const tablename = "Users";
 
@@ -79,3 +79,4 @@ const signInValidationSchema = Joi.object({
 });
 
 module.exports = router;
+

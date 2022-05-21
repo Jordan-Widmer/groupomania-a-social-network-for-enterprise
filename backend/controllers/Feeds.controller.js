@@ -11,11 +11,11 @@ let j = 0;
 
 const pool = mysql.createPool({
   connectionLimit: 100,
-  host: "localhost",
-  user: "root",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
   password: "",
-  database: "Groupomania",
-  port: 3307,
+  database: process.env.DB_DATABASE,
+  port: process.env.DB_PORT,
 });
 const tablename = "Posts";
 
@@ -62,9 +62,12 @@ module.exports = {
 
   likeFeed: async (req, res) => {
     const { likedBy } = req.body;
+
+    // ID Registration
     let query = `INSERT INTO Likes ( user_id, post_id) VALUES (${+likedBy}, ${+req
       .params.id});`;
     try {
+      // DB connection
       pool.getConnection((err, connection) => {
         if (err) throw err;
         connection.query(query, (err, rows) => {

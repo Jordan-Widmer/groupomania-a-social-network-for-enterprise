@@ -20,11 +20,11 @@ const storage = multer.diskStorage({
 
 const pool = mysql.createPool({
   connectionLimit: 100,
-  host: "localhost",
-  user: "root",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
   password: "",
-  database: "Groupomania",
-  port: 3307,
+  database: process.env.DB_DATABASE,
+  port: process.env.DB_PORT,
 });
 const tablename = "Users";
 
@@ -37,8 +37,12 @@ module.exports = {
     try {
       pool.getConnection((err, connection) => {
         if (err) throw err;
+
+        // Login ID
         console.log("connected as Id", +connection.threadId);
         const { name, email, password } = req.body;
+
+        // Email Checker
         const query = `Select * From ${tablename} where email = '${email}'`;
         connection.query(query, (err, rows) => {
           if (err) {
@@ -75,6 +79,7 @@ module.exports = {
   },
   updateUser: async (req, res) => {
     const { name, email, password } = req.body;
+
     // Build contact object
     const updateUser = {};
     if (name) updateUser.name = name;
