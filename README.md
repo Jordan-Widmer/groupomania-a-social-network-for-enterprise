@@ -8,7 +8,7 @@
 ## Backend
 Le backend a été crée avec Node.js, Express.js et MySQL comme base de données.
 ### Installation
-- Dans le terminal de VSCODE, situez-vous dans le dossier /backend.
+- Dans le terminal de VSCODE, situez-vous dans le dossier /backend avec la commande cd .\backend\.
 - Démarrer npm install pour installer toutes les dependencies du backend puis npm run server.
 - Dans le fichier .env, veuillez rentrer le host, les identifiants de votre utilisateur admin et le nom de la base de données que vous souhaitez créer.
 ### Development server
@@ -16,7 +16,7 @@ Démarrer nodemon server pour avoir accès au serveur de développement. L'appli
 # Frontend
 Le frontend a été crée avec Vue.js
 ### Installation
-Dans le dossier /frontend démarrez npm install pour installer toutes les dépendances du frontend.
+Deplacer vous dans le dossier frontend avec cd .\frontend\, puis démarrez npm install pour installer toutes les dépendances du frontend.
 ### Development server
 Démarrer npm run serve pour avoir accès au serveur de développement. L'application va se recharger automatiquement si vous modifiez un fichier.
 ## Droits Admin
