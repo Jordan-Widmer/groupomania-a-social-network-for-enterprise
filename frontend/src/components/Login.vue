@@ -149,13 +149,13 @@ body {
   font-size: 17px;
   padding-left: 20px;
   color: lightgrey;
-  border: 1px solid #ff9000;
+  border: 1px solid #2c3c5c;
   border-bottom-width: 2.5px;
   border-radius: 6px;
   transition: all 0.3s ease;
 }
 .wrapper form .field input:focus {
-  border-color: #ff9000;
+  border-color: #2c3c5c;
 }
 form .content {
   display: flex;
@@ -194,7 +194,7 @@ form .field input[type="submit"] {
   font-size: 20px;
   font-weight: 500;
   cursor: pointer;
-  background: linear-gradient(-135deg, #ff9000, #c46f00);
+  background: linear-gradient(-135deg, #142644, #2c3c5c);
   transition: all 0.3s ease;
 }
 form .field input[type="submit"]:active {
@@ -209,7 +209,7 @@ form .signup-link {
 }
 form .pass-link a,
 form .signup-link a {
-  color: #ff9000;
+  color: #2c3c5c;
   text-decoration: none;
   font-size: 14px;
 }

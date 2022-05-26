@@ -165,7 +165,7 @@ body {
   height: 2px;
   width: 38px;
   border-radius: 12px;
-  background: #ff9000;
+  background: #2c3c5c;
 }
 .wrapper form {
   margin-top: 30px;
@@ -197,7 +197,7 @@ form .input-box input {
 }
 .input-box input:focus,
 .input-box input:valid {
-  border-color: #ff9000;
+  border-color: #2c3c5c;
 }
 form .policy {
   display: flex;
@@ -216,7 +216,7 @@ form h3 {
   font-size: 20px;
   font-weight: 500;
   border: none;
-  background: linear-gradient(-135deg, #ff9000, #c46f00);
+  background: linear-gradient(-135deg, #142644, #2c3c5c);
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -232,7 +232,7 @@ form .text h3 {
   text-align: center;
 }
 form .text h3 a {
-  color: #ff9000;
+  color: #2c3c5c;
   text-decoration: none;
 }
 form .text h3 a:hover {

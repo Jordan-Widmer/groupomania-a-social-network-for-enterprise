@@ -106,7 +106,7 @@ ul {
   transition: all 0.3s ease;
 }
 .footer-col ul li a:hover {
-  color: #ff9000;
+  color: #2c3c5c;
   padding-left: 8px;
 }
 .footer-col .social-links a {
@@ -122,8 +122,8 @@ ul {
   transition: all 0.5s ease;
 }
 .footer-col .social-links a:hover {
-  color: #24262b;
-  background: linear-gradient(-135deg, #ff9000, #c46f00);
+  /* color: #24262b; */
+  background: linear-gradient(-135deg, #142644, #2c3c5c);
 }
 .ukraine-help {
   color: lightgrey;

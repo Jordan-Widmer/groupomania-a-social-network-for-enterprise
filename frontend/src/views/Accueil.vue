@@ -377,7 +377,7 @@ body {
   border: solid 1px lightgrey;
 }
 .write:hover {
-  border: 1px solid #ff9000;
+  border: 1px solid #2c3c5c;
   background: #212020;
   transition: 0.3s;
 }
@@ -404,8 +404,8 @@ body {
 .btn {
   outline: none;
   border: 0px;
-  color: #111;
-  background: linear-gradient(-135deg, #ff9000, #c46f00);
+  color: lightgrey;
+  background: linear-gradient(-135deg, #142644, #2c3c5c);
   padding: 8px 20px;
   border-radius: 8px;
   font-size: 15px;
@@ -420,8 +420,8 @@ body {
 }
 .send-button {
   cursor: pointer;
-  color: #111;
-  background: linear-gradient(-135deg, #ff9000, #c46f00);
+  color: lightgrey;
+  background: linear-gradient(-135deg, #142644, #2c3c5c);
   border: 0px;
   width: 55px;
   height: 33px;
@@ -483,7 +483,7 @@ body {
 }
 .feed-container:hover {
   transition: 0.3s;
-  border: 1px solid #ff9000;
+  border: 1px solid #2c3c5c;
   background: #212020;
   cursor: pointer;
 }
@@ -491,7 +491,7 @@ body {
   margin: 0px 6px;
 }
 .feed-body img {
-  height: 340px;
+  max-height: 500px;
   width: 100%;
   border-radius: 16px;
   object-fit: cover;
@@ -529,8 +529,8 @@ body {
   transition: all 0.3s ease;
 }
 .feed-buttons button:hover {
-  color: #111;
-  background: linear-gradient(-135deg, #ff9000, #c46f00);
+  /* color: #111; */
+  background: linear-gradient(-135deg, #142644, #2c3c5c);
 }
 .feed-likes {
   color: lightgrey;

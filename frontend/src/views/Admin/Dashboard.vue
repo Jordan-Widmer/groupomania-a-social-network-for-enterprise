@@ -162,7 +162,7 @@ export default {
   transition: all 0.3s ease;
 }
 .card:hover {
-  border: #ff9000 1px solid;
+  border: #2c3c5c 1px solid;
 }
 .card:not(:last-child) {
   margin-right: 10px;
@@ -176,6 +176,7 @@ export default {
   height: 30px;
   margin-right: 20px;
   border-radius: 50%;
+  object-fit: cover;
 }
 .card-posts {
   display: flex;
@@ -197,7 +198,7 @@ export default {
   border-radius: 15px;
 }
 .recent-post-card-container:hover {
-  border: #ff9000 1px solid;
+  border: #2c3c5c 1px solid;
 }
 .recent-post-list {
   list-style: none;
@@ -220,7 +221,7 @@ export default {
   margin-top: 20px;
 }
 .post-info p {
-  color: #ff9000;
+  color: lightgrey;
   margin: 2px 0px;
 }
 .post-title {
@@ -243,7 +244,7 @@ h1 {
 }
 h3 {
   font-weight: 400;
-  color: #ff9000;
+  color: lightgrey;
 }
 h4 {
   font-weight: 400;
@@ -255,7 +256,7 @@ h5 {
   margin-bottom: 16px;
   font-size: 24px;
   font-weight: 400;
-  color: #ff9000;
+  color: lightgray;
   font-family: "Poppins", sans-serif;
 }
 table {
@@ -325,7 +326,7 @@ table th {
 }
 .delete-user {
   transition: all 0.3s ease;
-  background: linear-gradient(-135deg, #ff9000, #c46f00);
+  background: linear-gradient(-135deg, #142644, #2c3c5c);
   color: #111;
   font-family: "Poppins", sans-serif;
   outline: none;

@@ -130,8 +130,8 @@ nav ul li a {
 }
 nav ul li a.active,
 nav ul li a:hover {
-  color: #111;
-  background: linear-gradient(-135deg, #ff9000, #c46f00);
+  /* color: #111; */
+  background: linear-gradient(-135deg, #142644, #2c3c5c);
 }
 nav .menu-btn i {
   color: #fff;
