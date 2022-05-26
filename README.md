@@ -19,5 +19,5 @@ Le frontend a été crée avec Vue.js
 Dans le dossier /frontend démarrez npm install pour installer toutes les dépendances du frontend.
 ### Development server
 Démarrer npm run serve pour avoir accès au serveur de développement. L'application va se recharger automatiquement si vous modifiez un fichier.
-### Droits Admin
+## Droits Admin
 Pour tester les droits d'admin, changez la valeur sur le champ isAdmin dans la table Users.
