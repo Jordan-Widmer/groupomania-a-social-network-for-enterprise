@@ -17,7 +17,7 @@ Pour installer ce projet veuillez vous procurer
 - Configurer Xampp puis lancer Apache et MySQL avec le bon PORT 
 - Dans le terminal de VSCODE, situez-vous dans le dossier /backend avec la commande cd .\backend\.
 - Démarrer npm install pour installer toutes les dependencies du backend puis npm run server pour le lancer.
-- Dans le fichier .env, veuillez rentrer le PORT, la SECRET_KEY, la DB_USER, la DB_HOST, le DB_PASSWORD, la DB_DATABASE et le DB_PORT
+- Crée un fichier .env puis rentrer le PORT, la SECRET_KEY, la DB_USER, la DB_HOST, le DB_PASSWORD, la DB_DATABASE et le DB_PORT à l'intérieur
 ### Development server
 Le serveur ce mettra automatiquement à jour avec nodemon
 # Frontend
