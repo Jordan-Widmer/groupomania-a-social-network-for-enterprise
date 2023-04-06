@@ -22,7 +22,7 @@ The skills evaluated for this project are: managing SQL data storage, customizin
 5. Run `npm install` to install all backend dependencies
 6. Run `npm run server` to start the server
 7. Create a .env file with the following information: PORT, SECRET_KEY, DB_USER, DB_HOST, DB_PASSWORD, DB_DATABASE, DB_PORT
-8. Navigate to the /frontend folder using the command cd .\frontend
+8. Navigate to the /frontend folder using the command `cd .\frontend`
 9. Run `npm install` to install all frontend dependencies
 10. Run `npm run serve` to access the development server. The application will automatically reload if you modify a file.
 
